@@ -1,0 +1,3271 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>QuoComm - our-soldier</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+
+    <style>
+        /* General */
+
+@font-face {
+    font-family: Whitney;
+    src: url(https://cdn.jsdelivr.net/gh/Tyrrrz/DiscordFonts@master/whitney-300.woff);
+    font-weight: 300;
+}
+
+@font-face {
+    font-family: Whitney;
+    src: url(https://cdn.jsdelivr.net/gh/Tyrrrz/DiscordFonts@master/whitney-400.woff);
+    font-weight: 400;
+}
+
+@font-face {
+    font-family: Whitney;
+    src: url(https://cdn.jsdelivr.net/gh/Tyrrrz/DiscordFonts@master/whitney-500.woff);
+    font-weight: 500;
+}
+
+@font-face {
+    font-family: Whitney;
+    src: url(https://cdn.jsdelivr.net/gh/Tyrrrz/DiscordFonts@master/whitney-600.woff);
+    font-weight: 600;
+}
+
+@font-face {
+    font-family: Whitney;
+    src: url(https://cdn.jsdelivr.net/gh/Tyrrrz/DiscordFonts@master/whitney-700.woff);
+    font-weight: 700;
+}
+
+body {
+    font-family: "Whitney", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 17px;
+}
+
+a {
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+img {
+    object-fit: contain;
+}
+
+.markdown {
+    max-width: 100%;
+    line-height: 1.3;
+    overflow-wrap: break-word;
+}
+
+.preserve-whitespace {
+    white-space: pre-wrap;
+}
+
+.spoiler {
+    /* width: fit-content; */
+    display: inline-block;
+    /* This is more consistent across browsers, the old attribute worked well under Chrome but not FireFox. */
+}
+
+.spoiler--hidden {
+    cursor: pointer;
+}
+
+.spoiler-text {
+    border-radius: 3px;
+}
+
+.spoiler--hidden .spoiler-text {
+    color: rgba(0, 0, 0, 0);
+}
+
+.spoiler--hidden .spoiler-text::selection {
+    color: rgba(0, 0, 0, 0);
+}
+
+.spoiler-image {
+    position: relative;
+    overflow: hidden;
+    border-radius: 3px;
+}
+
+.spoiler--hidden .spoiler-image {
+    box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.1);
+}
+
+.spoiler--hidden .spoiler-image * {
+    filter: blur(44px);
+}
+
+.spoiler--hidden .spoiler-image:after {
+    content: "SPOILER";
+    color: #dcddde;
+    background-color: rgba(0, 0, 0, 0.6);
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    font-weight: 600;
+    padding: 100%;
+    border-radius: 20px;
+    letter-spacing: 0.05em;
+    font-size: 0.9em;
+}
+
+.spoiler--hidden:hover .spoiler-image:after {
+    color: #fff;
+    background-color: rgba(0, 0, 0, 0.9);
+}
+
+.quote {
+    margin: 0.1em 0;
+    padding-left: 0.6em;
+    border-left: 4px solid;
+    border-radius: 3px;
+}
+
+.pre {
+    font-family: "Consolas", "Courier New", Courier, monospace;
+}
+
+.pre--multiline {
+    margin-top: 0.25em;
+    padding: 0.5em;
+    border: 2px solid;
+    border-radius: 5px;
+}
+
+.pre--inline {
+    padding: 2px;
+    border-radius: 3px;
+    font-size: 0.85em;
+}
+
+.mention {
+    border-radius: 3px;
+    padding: 0 2px;
+    color: #7289da;
+    background: rgba(114, 137, 218, .1);
+    font-weight: 500;
+}
+
+.emoji {
+    width: 1.25em;
+    height: 1.25em;
+    margin: 0 0.06em;
+    vertical-align: -0.4em;
+}
+
+.emoji--small {
+    width: 1em;
+    height: 1em;
+}
+
+.emoji--large {
+    width: 2.8em;
+    height: 2.8em;
+}
+
+/* Preamble */
+
+.preamble {
+    display: grid;
+    margin: 0 0.3em 0.6em 0.3em;
+    max-width: 100%;
+    grid-template-columns: auto 1fr;
+}
+
+.preamble__guild-icon-container {
+    grid-column: 1;
+}
+
+.preamble__guild-icon {
+    max-width: 88px;
+    max-height: 88px;
+}
+
+.preamble__entries-container {
+    grid-column: 2;
+    margin-left: 0.6em;
+}
+
+.preamble__entry {
+    font-size: 1.4em;
+}
+
+.preamble__entry--small {
+    font-size: 1em;
+}
+
+/* Chatlog */
+
+.chatlog {
+    max-width: 100%;
+}
+
+.chatlog__message-group {
+    display: grid;
+    margin: 0 0.6em;
+    padding: 0.9em 0;
+    border-top: 1px solid;
+    grid-template-columns: auto 1fr;
+}
+
+.chatlog__reference-symbol {
+    grid-column: 1;
+    border-style: solid;
+    border-width: 2px 0 0 2px;
+    border-radius: 8px 0 0 0;
+    margin-left: 16px;
+    margin-top: 8px;
+}
+
+.chatlog__reference {
+    display: flex;
+    grid-column: 2;
+    margin-left: 1.2em;
+    margin-bottom: 0.25em;
+    font-size: 0.875em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    align-items: center;
+}
+
+.chatlog__reference-avatar {
+    border-radius: 50%;
+    height: 16px;
+    width: 16px;
+    margin-right: 0.25em;
+}
+
+.chatlog__reference-name {
+    margin-right: 0.25em;
+    font-weight: 600;
+}
+
+.chatlog__reference-link {
+    flex-grow: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.chatlog__reference-link:hover {
+    text-decoration: none;
+}
+
+.chatlog__reference-content > * {
+    display: inline;
+}
+
+.chatlog__reference-edited-timestamp {
+    margin-left: 0.25em;
+    font-size: 0.8em;
+}
+
+.chatlog__author-avatar-container {
+    grid-column: 1;
+    width: 40px;
+    height: 40px;
+}
+
+.chatlog__author-avatar {
+    border-radius: 50%;
+    height: 40px;
+    width: 40px;
+}
+
+.chatlog__messages {
+    grid-column: 2;
+    margin-left: 1.2em;
+    min-width: 50%;
+}
+
+.chatlog__author-name {
+    font-weight: 500;
+}
+
+.chatlog__timestamp {
+    margin-left: 0.3em;
+    font-size: 0.75em;
+}
+
+.chatlog__message {
+    padding: 0.1em 0.3em;
+    margin: 0 -0.3em;
+    background-color: transparent;
+    transition: background-color 1s ease;
+}
+
+.chatlog__content {
+    font-size: 0.95em;
+    word-wrap: break-word;
+}
+
+.chatlog__edited-timestamp {
+    margin-left: 0.15em;
+    font-size: 0.8em;
+}
+
+.chatlog__attachment {
+    margin-top: 0.3em;
+}
+
+.chatlog__attachment-thumbnail {
+    vertical-align: top;
+    max-width: 45vw;
+    max-height: 500px;
+    border-radius: 3px;
+}
+
+.chatlog__attachment-container {
+    height: 40px;
+    width: 100%;
+    max-width: 520px;
+    padding: 10px;
+    border: 1px solid;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.chatlog__attachment-icon {
+    float: left;
+    height: 100%;
+    margin-right: 10px;
+}
+
+.chatlog__attachment-icon > .a {
+    fill: #f4f5fb;
+    d: path("M50,935a25,25,0,0,1-25-25V50A25,25,0,0,1,50,25H519.6L695,201.32V910a25,25,0,0,1-25,25Z");
+}
+
+.chatlog__attachment-icon > .b {
+    fill: #7789c4;
+    d: path("M509.21,50,670,211.63V910H50V50H509.21M530,0H50A50,50,0,0,0,0,50V910a50,50,0,0,0,50,50H670a50,50,0,0,0,50-50h0V191Z");
+}
+
+.chatlog__attachment-icon > .c {
+    fill: #f4f5fb;
+    d: path("M530,215a25,25,0,0,1-25-25V50a25,25,0,0,1,16.23-23.41L693.41,198.77A25,25,0,0,1,670,215Z");
+}
+
+.chatlog__attachment-icon > .d {
+    fill: #7789c4;
+    d: path("M530,70.71,649.29,190H530V70.71M530,0a50,50,0,0,0-50,50V190a50,50,0,0,0,50,50H670a50,50,0,0,0,50-50Z");
+}
+
+.chatlog__attachment-filesize {
+    color: #72767d;
+    font-size: 12px;
+}
+
+.chatlog__attachment-filename {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.chatlog__embed {
+    display: flex;
+    margin-top: 0.3em;
+    max-width: 520px;
+}
+
+.chatlog__embed-color-pill {
+    flex-shrink: 0;
+    width: 0.25em;
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 3px;
+}
+
+.chatlog__embed-content-container {
+    display: flex;
+    flex-direction: column;
+    padding: 0.5em 0.6em;
+    border: 1px solid;
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+}
+
+.chatlog__embed-content {
+    display: flex;
+    width: 100%;
+}
+
+.chatlog__embed-text {
+    flex: 1;
+}
+
+.chatlog__embed-author {
+    display: flex;
+    margin-bottom: 0.3em;
+    align-items: center;
+}
+
+.chatlog__embed-author-icon {
+    margin-right: 0.5em;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+}
+
+.chatlog__embed-author-name {
+    font-size: 0.875em;
+    font-weight: 600;
+}
+
+.chatlog__embed-title {
+    margin-bottom: 0.2em;
+    font-size: 0.875em;
+    font-weight: 600;
+}
+
+.chatlog__embed-description {
+    font-weight: 500;
+    font-size: 0.85em;
+}
+
+.chatlog__embed-fields {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.chatlog__embed-field {
+    flex: 0;
+    min-width: 100%;
+    max-width: 506px;
+    padding-top: 0.6em;
+    font-size: 0.875em;
+}
+
+.chatlog__embed-field--inline {
+    flex: 1;
+    flex-basis: auto;
+    min-width: 150px;
+}
+
+.chatlog__embed-field-name {
+    margin-bottom: 0.2em;
+    font-weight: 600;
+}
+
+.chatlog__embed-field-value {
+    font-weight: 500;
+}
+
+.chatlog__embed-thumbnail {
+    flex: 0;
+    margin-left: 1.2em;
+    max-width: 80px;
+    max-height: 80px;
+    border-radius: 3px;
+}
+
+.chatlog__embed-image-container {
+    margin-top: 0.6em;
+}
+
+.chatlog__embed-image {
+    max-width: 500px;
+    max-height: 400px;
+    border-radius: 3px;
+}
+
+.chatlog__embed-footer {
+    margin-top: 0.6em;
+}
+
+.chatlog__embed-footer-icon {
+    margin-right: 0.2em;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    vertical-align: middle;
+}
+
+.chatlog__embed-footer-text {
+    font-size: 0.75em;
+    font-weight: 500;
+}
+
+.chatlog__reactions {
+    display: flex;
+}
+
+.chatlog__reaction {
+    display: flex;
+    align-items: center;
+    margin: 0.35em 0.1em 0.1em 0.1em;
+    padding: 0.2em 0.35em;
+    border-radius: 3px;
+}
+
+.chatlog__reaction-count {
+    min-width: 9px;
+    margin-left: 0.35em;
+    font-size: 0.875em;
+}
+
+.chatlog__bot-tag {
+    position: relative;
+    top: -.2em;
+    margin-left: 0.3em;
+    padding: 0.05em 0.3em;
+    border-radius: 3px;
+    vertical-align: middle;
+    line-height: 1.3;
+    background: #7289da;
+    color: #ffffff;
+    font-size: 0.625em;
+    font-weight: 500;
+}
+
+/* Postamble */
+
+.postamble {
+    margin: 1.4em 0.3em 0.6em 0.3em;
+    padding: 1em;
+    border-top: 1px solid;
+}
+    </style>
+    <style>
+        /* General */
+
+body {
+    background-color: #36393e;
+    color: #dcddde;
+}
+
+a {
+    color: #0096cf;
+}
+
+.spoiler-text {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.spoiler--hidden .spoiler-text {
+    background-color: #202225;
+}
+
+.spoiler--hidden:hover .spoiler-text {
+    background-color: rgba(32, 34, 37, 0.8);
+}
+
+.quote {
+    border-color: #4f545c;
+}
+
+.pre {
+    background-color: #2f3136 !important;
+}
+
+.pre--multiline {
+    border-color: #282b30 !important;
+    color: #b9bbbe !important;
+}
+
+/* === Preamble === */
+
+.preamble__entry {
+    color: #ffffff;
+}
+
+/* Chatlog */
+
+.chatlog__message-group {
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.chatlog__reference-symbol {
+    border-color: #4f545c;
+}
+
+.chatlog__reference {
+    color: #b5b6b8;
+}
+
+.chatlog__reference-link {
+    color: #b5b6b8;
+}
+
+.chatlog__reference-link:hover {
+    color: #ffffff;
+}
+
+.chatlog__reference-edited-timestamp {
+    color: rgba(255, 255, 255, 0.2);
+}
+
+.chatlog__author-name {
+    color: #ffffff;
+}
+
+.chatlog__timestamp {
+    color: rgba(255, 255, 255, 0.2);
+}
+
+.chatlog__message--highlighted {
+    background-color: rgba(114, 137, 218, 0.2) !important;
+}
+
+.chatlog__message--pinned {
+    background-color: rgba(249, 168, 37, 0.05);
+}
+
+.chatlog__attachment-container {
+    background-color: #2f3136;
+    border-color: #292b2f;
+}
+
+.chatlog__edited-timestamp {
+    color: rgba(255, 255, 255, 0.2);
+}
+
+.chatlog__embed-color-pill--default {
+    background-color: rgba(79, 84, 92, 1);
+}
+
+.chatlog__embed-content-container {
+    background-color: rgba(46, 48, 54, 0.3);
+    border-color: rgba(46, 48, 54, 0.6);
+}
+
+.chatlog__embed-author-name {
+    color: #ffffff;
+}
+
+.chatlog__embed-author-name-link {
+    color: #ffffff;
+}
+
+.chatlog__embed-title {
+    color: #ffffff;
+}
+
+.chatlog__embed-description {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.chatlog__embed-field-name {
+    color: #ffffff;
+}
+
+.chatlog__embed-field-value {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.chatlog__embed-footer {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.chatlog__reaction {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.chatlog__reaction-count {
+    color: rgba(255, 255, 255, 0.3);
+}
+
+/* Postamble */
+
+.postamble {
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.postamble__entry {
+    color: #ffffff;
+}
+    </style>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/solarized-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/highlight.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.pre--multiline').forEach(block => hljs.highlightBlock(block));
+        });
+    </script>
+
+    <script>
+        function scrollToMessage(event, id) {
+            var element = document.getElementById('message-' + id);
+
+            if (element) {
+                event.preventDefault();
+
+                element.classList.add('chatlog__message--highlighted');
+
+                window.scrollTo({
+                    top: element.getBoundingClientRect().top - document.body.getBoundingClientRect().top - (window.innerHeight / 2),
+                    behavior: 'smooth'
+                });
+
+                window.setTimeout(function() {
+                    element.classList.remove('chatlog__message--highlighted');
+                }, 2000);
+            }
+        }
+
+        function showSpoiler(event, element) {
+            if (element && element.classList.contains('spoiler--hidden')) {
+                event.preventDefault();
+                element.classList.remove('spoiler--hidden');
+            }
+        }
+    </script>
+</head>
+<body>
+
+<div class="preamble">
+    <div class="preamble__guild-icon-container">
+        <img class="preamble__guild-icon" src="https://cdn.discordapp.com/icons/587139618999369739/96fed1309a2f18dd0a401862f180908e.png" alt="Guild icon">
+    </div>
+    <div class="preamble__entries-container">
+        <div class="preamble__entry">QuoComm</div>
+        <div class="preamble__entry">Welcome Back! / our-soldier</div>
+
+            <div class="preamble__entry preamble__entry--small">Appreciation channel :D</div>
+
+    </div>
+</div>
+
+<div class="chatlog">
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/314427251502350337/a_55765e24dded2acd3a9e6155c448605e.gif" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="mokendkomer#1010" data-user-id="314427251502350337" style="color: rgb(193,29,245)">Mukund Kumar</span>
+
+
+        <span class="chatlog__timestamp">06-Jun-20 10:05 PM</span>
+
+            <div class="chatlog__message " data-message-id="718865572477009940" id="message-718865572477009940">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">When I first saw you, you were the member of quocomm we mods hated. You had exponentially more warnings than anyone else, and it almost felt like you set an example for the other violators.
+Thankfully, I saw more of you in the following months to learn some things before we banned you.
+
+You’re wild nadeem.
+You’re among the wildest people I know.
+And you’ve taught me that being wild doesn’t necessarily have to be an abetment.
+What you just went through would have crippled me or basically anyone else I know. To say that I’m impressed you lived to tell the tale is an understatement. 
+
+It was amazing connecting you with Aishah. It was an exhilarating experience hearing your voice cheer up so hard upon hearing her voice.
+I’m not mad because your conversations with her were the flashiest thing in my bland ass wardrobe. I’m mad because you left a smile on me for the next half an hour of connecting you every time.
+
+It’s been quite the painful wait for you both, but I’m beyond glad you’re back right now. Not only do we all get 50x more imaginative insults, but i also don’t have to be called cupid every day at 6.
+
+Welcome back gayman.
+Ps.sorry about NadeemBot. I hope Aishah likes you more than the bot.</span>
+
+                        </div>
+                    </div>
+
+
+
+                    <div class="chatlog__reactions">
+                            <div class="chatlog__reaction">
+                                <img class="emoji emoji--small" alt="♥️" title="♥️" src="https://twemoji.maxcdn.com/2/72x72/2665.png">
+                                <span class="chatlog__reaction-count">12</span>
+                            </div>
+                    </div>
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/389779718473515008/10c5177ca94390dbb127bd884b44df0d.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Samad#0954" data-user-id="389779718473515008" style="color: rgb(252,25,112)">Samad Bilal</span>
+
+
+        <span class="chatlog__timestamp">06-Jun-20 10:21 PM</span>
+
+            <div class="chatlog__message " data-message-id="718869731498655796" id="message-718869731498655796">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Nadeeeeeeeeem, it’s been three months since I’ve known you and for over two of them months you’ve been locked away with 180 men  with little to no communication to your family at quocomm . The idhaar aa tip jar must be full after all those days showering with those men huh? <img class="emoji " alt="👀" title="👀" src="https://twemoji.maxcdn.com/2/72x72/1f440.png"> 
+When I think of you Nadeem, the first thing that pops up into my head aside from you being a bogar bacha is how enthusiastic you are about everything. You’re always so joyful and you cheer everyone up, somehow, even though 50% of your messages are insulting us all. <img class="emoji " alt="😂" title="😂" src="https://twemoji.maxcdn.com/2/72x72/1f602.png"> You also bring a certain energy into the QuoComm chat that nobody else can bring. You’re always energetic and QuoComm has not been the same without you. But I’m so glad and I’m sure everyone else is that you’re back and you better be here to stay. <img class="emoji " alt="😡" title="😡" src="https://twemoji.maxcdn.com/2/72x72/1f621.png"> 
+I don&#39;t think there&#39;s been a day in Quocomm since you&#39;ve been absent where your presence wasn&#39;t missed..
+You&#39;re brave as hell and I&#39;m so proud of you, I&#39;m proud to say that my brother is serving in the army. It takes a lot of courage to do what you do and no regular man is cut out for it. You really have to be built a certain way to be able to endure what you&#39;ve had to, so despite all the banter, I have mad respect for you bro.
+I can&#39;t wait to hear all the crazy stories that will come along with your return and for some weird reason, I&#39;m also looking forward to being roasted by you again on a daily basis. I&#39;m also a little shook though.. Mukund forwarded me the message you had for me  LOOL
+<a href="https://i.imgur.com/lP9FoHi.png">https://i.imgur.com/lP9FoHi.png</a>
+Wowwww forgive me please..I don&#39;t want to see your boxing skills you&#39;ve picked up in the last two months you fuckarrr:( dfjksdkjsh, ahhh I love you man ❤️ no gea <img class="emoji " alt="🗡" title="🗡" src="https://twemoji.maxcdn.com/2/72x72/1f5e1.png">️  <img class="emoji " alt="tom" title="tom" src="https://cdn.discordapp.com/emojis/618822180742103043.png">  <img class="emoji " alt="Ha" title="Ha" src="https://cdn.discordapp.com/emojis/629615794094997505.png"> <img class="emoji " alt="nadeem" title="nadeem" src="https://cdn.discordapp.com/emojis/715958443453972502.png"></span>
+
+                        </div>
+                    </div>
+
+
+                    <div class="chatlog__embed">
+                            <div class="chatlog__embed-color-pill chatlog__embed-color-pill--default"></div>
+
+                        <div class="chatlog__embed-content-container">
+                            <div class="chatlog__embed-content">
+                                <div class="chatlog__embed-text">
+
+
+
+                                </div>
+
+                                    <div class="chatlog__embed-thumbnail-container">
+                                        <a class="chatlog__embed-thumbnail-link" href="https://i.imgur.com/lP9FoHi.png">
+                                            <img class="chatlog__embed-thumbnail" src="https://i.imgur.com/lP9FoHi.png" alt="Thumbnail">
+                                        </a>
+                                    </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+                    <div class="chatlog__reactions">
+                            <div class="chatlog__reaction">
+                                <img class="emoji emoji--small" alt="❤️" title="❤️" src="https://twemoji.maxcdn.com/2/72x72/2764.png">
+                                <span class="chatlog__reaction-count">10</span>
+                            </div>
+                    </div>
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/696772645173198879/dfe252e4e2a1762bbe202a78a7492846.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Lord_Zeus#7275" data-user-id="696772645173198879" style="color: rgb(87,131,235)">Amos Mordecai</span>
+
+
+        <span class="chatlog__timestamp">07-Jun-20 11:20 PM</span>
+
+            <div class="chatlog__message " data-message-id="719246806093135942" id="message-719246806093135942">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Here&#39;s to the future brother.</span>
+
+                        </div>
+                    </div>
+
+                    <div class="chatlog__attachment">
+                        <div class="" onclick="">
+                            <div class="">
+                                    <a href="https://cdn.discordapp.com/attachments/715630063596601415/719246805644214332/Screenshot_2020-06-07_230734.jpg">
+                                        <img class="chatlog__attachment-thumbnail" src="https://cdn.discordapp.com/attachments/715630063596601415/719246805644214332/Screenshot_2020-06-07_230734.jpg" alt="Image attachment" title="Image: Screenshot_2020-06-07_230734.jpg (603.02 KB)">
+                                    </a>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="chatlog__reactions">
+                            <div class="chatlog__reaction">
+                                <img class="emoji emoji--small" alt="❤️" title="❤️" src="https://twemoji.maxcdn.com/2/72x72/2764.png">
+                                <span class="chatlog__reaction-count">17</span>
+                            </div>
+                            <div class="chatlog__reaction">
+                                <img class="emoji emoji--small" alt="Ha" title="Ha" src="https://cdn.discordapp.com/emojis/629615794094997505.png">
+                                <span class="chatlog__reaction-count">7</span>
+                            </div>
+                    </div>
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/670323132325953580/15d9a370bbf5e42c007cb0832b6eaea6.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="EG97#8758" data-user-id="670323132325953580" style="">EG97</span>
+
+
+        <span class="chatlog__timestamp">08-Jun-20 01:08 PM</span>
+
+            <div class="chatlog__message " data-message-id="719455374406713345" id="message-719455374406713345">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">&quot; bhendi &quot; that&#39;s his cover up word for Family gatherings, since he would get whacked if he said bc. So bhai mere, &quot;Bhendi&quot;.</span>
+
+                        </div>
+                    </div>
+
+
+
+                    <div class="chatlog__reactions">
+                            <div class="chatlog__reaction">
+                                <img class="emoji emoji--small" alt="&#128518;" title="&#128518;" src="https://twemoji.maxcdn.com/2/72x72/1f606.png">
+                                <span class="chatlog__reaction-count">3</span>
+                            </div>
+                    </div>
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/689712244057047045/320df78dc53b4b4f9c481a5a32f2806b.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="OMMBoy#0696" data-user-id="689712244057047045" style="color: rgb(87,131,235)">Anthony Runfola</span>
+
+
+        <span class="chatlog__timestamp">08-Jun-20 01:15 PM</span>
+
+            <div class="chatlog__message " data-message-id="719457044683554856" id="message-719457044683554856">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">When you come back, for every ribbon/medal you have, I will treat you out to a feast until you look like Mukesh Ambani. I’m proud of you bro!!! 
+
+I will always remember and cherish the moments we had in the server where we’d always play stupid jokes and get the mods mad at us, fuck why did we mature, when you come back we should do it again, one last time brother <img class="emoji " alt="🙏" title="🙏" src="https://twemoji.maxcdn.com/2/72x72/1f64f.png"><img class="emoji " alt="🏽" title="🏽" src="https://twemoji.maxcdn.com/2/72x72/1f3fd.png"></span>
+
+                                <span class="chatlog__edited-timestamp" title="08-Jun-20 01:15 PM">(edited)</span>
+                        </div>
+                    </div>
+
+
+
+                    <div class="chatlog__reactions">
+                            <div class="chatlog__reaction">
+                                <img class="emoji emoji--small" alt="&#128555;" title="&#128555;" src="https://twemoji.maxcdn.com/2/72x72/1f62b.png">
+                                <span class="chatlog__reaction-count">3</span>
+                            </div>
+                    </div>
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/587336597050228747/1166add741bbd15f6bcd39050ce74602.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Mav#0007" data-user-id="587336597050228747" style="color: rgb(87,131,235)">Mav</span>
+
+
+        <span class="chatlog__timestamp">08-Jun-20 01:27 PM</span>
+
+            <div class="chatlog__message " data-message-id="719460044302712914" id="message-719460044302712914">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Welcome soldier!
+
+We remember your bazooka!!!</span>
+
+                        </div>
+                    </div>
+
+                    <div class="chatlog__attachment">
+                        <div class="" onclick="">
+                            <div class="">
+                                    <a href="https://cdn.discordapp.com/attachments/715630063596601415/719460044038733834/tenor_24.gif">
+                                        <img class="chatlog__attachment-thumbnail" src="https://cdn.discordapp.com/attachments/715630063596601415/719460044038733834/tenor_24.gif" alt="Image attachment" title="Image: tenor_24.gif (6.1 MB)">
+                                    </a>
+                            </div>
+                        </div>
+                    </div>
+
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/408210363566522379/e7018460a7c7e484b15840c413c4b2a5.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Divy#0585" data-user-id="408210363566522379" style="color: rgb(252,25,112)">Divyanshu Singh</span>
+
+
+        <span class="chatlog__timestamp">08-Jun-20 01:29 PM</span>
+
+            <div class="chatlog__message " data-message-id="719460486805979197" id="message-719460486805979197">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><span class="mention" title="Nadeem Akhtar#9649">@Lt. Nadeem Choudhury</span> mcbckutrya third meetup soon. We were planning the third meetup then the lockdown happened, find a good venue and I&#39;ll bring the pasta I promised lmao. yaar jaldi aaja vcs are quieter without you and we have to do the luv session too lol.</span>
+
+                                <span class="chatlog__edited-timestamp" title="08-Jun-20 01:35 PM">(edited)</span>
+                        </div>
+                    </div>
+
+
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/208491528665038850/2946fcd67ba3c0d2770fa06049189b6f.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Humpty#1200" data-user-id="208491528665038850" style="color: rgb(87,131,235)">Sambudh</span>
+
+
+        <span class="chatlog__timestamp">08-Jun-20 01:30 PM</span>
+
+            <div class="chatlog__message " data-message-id="719460940390727742" id="message-719460940390727742">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Nadeeem Nadeeem Nadeeem what do I say, I remember the days you joined the server, you were definitely not the one who was &quot;Favourite of the mods&quot;. But you were and still are an irreplaceable part of quocomm.
+
+I am sure you enjoyed your washroom vc sessions with us immature peeps giving us your priceless MATURE advices. Definitely thats the reason you undertook all those risk for us (so Nice of you sir <img class="emoji " alt="cookieboi" title="cookieboi" src="https://cdn.discordapp.com/emojis/589968263253852160.png"> ). 
+
+&quot;Tere liye weed ke paranthe aur harpic ka sharbat bana ke rakha hai ab to aaja Nanhe Munhe Rahi&quot;
+
+This translation will be provided by Nadeem. <img class="emoji " alt="namaste" title="namaste" src="https://cdn.discordapp.com/emojis/679632139117264942.png"></span>
+
+                        </div>
+                    </div>
+
+
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/embed/avatars/0.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="iamsherlocked#3765" data-user-id="279977106077777920" style="">iamsherlocked</span>
+
+
+        <span class="chatlog__timestamp">08-Jun-20 01:33 PM</span>
+
+            <div class="chatlog__message " data-message-id="719461540448960553" id="message-719461540448960553">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Hey it&#39;s been so long before you disappeared !
+
+More like lockdown and situations made you the worst of sufferer among all members of quocomm server. Not anymore!
+
+I missed you Nadu and I pray for your well return, and <s>bless us all with your ak47 on 13th</s>, you were one of the first person I met on the server and one of the nicest person I ever befriended. And i remember the mingling we used to do in dms in a halal way , jk ;) hope we will continue that to fill in the gaps. Looking forward for ur return, and more so for my exams to end asap so we can get back to mingling to the fullest extent like we used to earlier :) welcome back Fauji!</span>
+
+                        </div>
+                    </div>
+
+
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/478604218173882388/a10cd096b7d0437049c578e8633312b2.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="yumiii#3805" data-user-id="478604218173882388" style="color: rgb(87,131,235)">Yumna Salman</span>
+
+
+        <span class="chatlog__timestamp">08-Jun-20 01:54 PM</span>
+
+            <div class="chatlog__message " data-message-id="719466928296558692" id="message-719466928296558692">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">I dont even know where to start with this.... I&#39;ve known Nadeem for so long and I&#39;ve vce&#39;d with him a couple of times, i remember when i sang for him on the vcs <img class="emoji " alt="😭" title="😭" src="https://twemoji.maxcdn.com/2/72x72/1f62d.png">. Seriously the way he welcomed me with open arms is something I greatly appreciate. His sense of humor, the way he talks, his bravery and everything about him is just so epic. I missed you brooo. Welcome back :)))
+PS. I&#39;m aware the flag isn&#39;t an accurate representation but it&#39;s my first time so <img class="emoji " alt="😅" title="😅" src="https://twemoji.maxcdn.com/2/72x72/1f605.png"></span>
+
+                                <span class="chatlog__edited-timestamp" title="08-Jun-20 02:02 PM">(edited)</span>
+                        </div>
+                    </div>
+
+                    <div class="chatlog__attachment">
+                        <div class="" onclick="">
+                            <div class="">
+                                    <a href="https://cdn.discordapp.com/attachments/715630063596601415/719466927793242162/20200608_132344.jpg">
+                                        <img class="chatlog__attachment-thumbnail" src="https://cdn.discordapp.com/attachments/715630063596601415/719466927793242162/20200608_132344.jpg" alt="Image attachment" title="Image: 20200608_132344.jpg (2.37 MB)">
+                                    </a>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="chatlog__reactions">
+                            <div class="chatlog__reaction">
+                                <img class="emoji emoji--small" alt="⭐" title="⭐" src="https://twemoji.maxcdn.com/2/72x72/2b50.png">
+                                <span class="chatlog__reaction-count">11</span>
+                            </div>
+                            <div class="chatlog__reaction">
+                                <img class="emoji emoji--small" alt="❤️" title="❤️" src="https://twemoji.maxcdn.com/2/72x72/2764.png">
+                                <span class="chatlog__reaction-count">8</span>
+                            </div>
+                    </div>
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/563035448138792961/a_f67ba0f64d74043e84eecd228cf66bd5.gif" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Ben Tenysson#6969" data-user-id="563035448138792961" style="color: rgb(87,131,235)">Pavan Sai</span>
+
+
+        <span class="chatlog__timestamp">08-Jun-20 01:56 PM</span>
+
+            <div class="chatlog__message " data-message-id="719467287668850760" id="message-719467287668850760">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">It&#39;s been a long time jiju ji 
+We missed you so much<img class="emoji " alt="😖" title="😖" src="https://twemoji.maxcdn.com/2/72x72/1f616.png">
+You always clarify my doubts without any delay.
+You are such amazing guyyyyy<img class="emoji " alt="😍" title="😍" src="https://twemoji.maxcdn.com/2/72x72/1f60d.png">
+Welcome back LIEUTENANT NADEEM AKTHAR CHOUDHURY <img class="emoji " alt="🎖" title="🎖" src="https://twemoji.maxcdn.com/2/72x72/1f396.png">️ <img class="emoji " alt="👮" title="👮" src="https://twemoji.maxcdn.com/2/72x72/1f46e.png">  <img class="emoji " alt="😍" title="😍" src="https://twemoji.maxcdn.com/2/72x72/1f60d.png">
+<img class="emoji " alt="🥳" title="🥳" src="https://twemoji.maxcdn.com/2/72x72/1f973.png">
+I can disturb you with my silly doubts again <img class="emoji " alt="🤣" title="🤣" src="https://twemoji.maxcdn.com/2/72x72/1f923.png"></span>
+
+                                <span class="chatlog__edited-timestamp" title="08-Jun-20 01:57 PM">(edited)</span>
+                        </div>
+                    </div>
+
+
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/519927226280443928/8adb83663f3310e4c7f8b0ecbb030edd.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Aishah Hannan#7828" data-user-id="519927226280443928" style="color: rgb(240,99,3)">Aishah Hannan</span>
+
+
+        <span class="chatlog__timestamp">08-Jun-20 02:05 PM</span>
+
+            <div class="chatlog__message " data-message-id="719469730661924966" id="message-719469730661924966">
+
+                    <div class="chatlog__attachment">
+                        <div class="" onclick="">
+                            <div class="">
+                                    <a href="https://cdn.discordapp.com/attachments/715630063596601415/719469730632695908/Screenshot_20200608-093541.jpg">
+                                        <img class="chatlog__attachment-thumbnail" src="https://cdn.discordapp.com/attachments/715630063596601415/719469730632695908/Screenshot_20200608-093541.jpg" alt="Image attachment" title="Image: Screenshot_20200608-093541.jpg (26.49 KB)">
+                                    </a>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="chatlog__reactions">
+                            <div class="chatlog__reaction">
+                                <img class="emoji emoji--small" alt="⭐" title="⭐" src="https://twemoji.maxcdn.com/2/72x72/2b50.png">
+                                <span class="chatlog__reaction-count">14</span>
+                            </div>
+                            <div class="chatlog__reaction">
+                                <img class="emoji emoji--small" alt="&#128514;" title="&#128514;" src="https://twemoji.maxcdn.com/2/72x72/1f602.png">
+                                <span class="chatlog__reaction-count">10</span>
+                            </div>
+                    </div>
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/463597678400503820/dcae552d2ca96ff330401060fd47799d.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="heliotrope#3452" data-user-id="463597678400503820" style="color: rgb(87,131,235)">Alexis Cedargren</span>
+
+
+        <span class="chatlog__timestamp">08-Jun-20 02:20 PM</span>
+
+            <div class="chatlog__message " data-message-id="719473535692832779" id="message-719473535692832779">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Welcome back Nadeem!!</span>
+
+                        </div>
+                    </div>
+
+
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/526808110443266048/16be0bd1e50a0dfb6118f18a9bcb4850.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Dev Shah#4677" data-user-id="526808110443266048" style="color: rgb(87,131,235)">Dev Shah</span>
+
+
+        <span class="chatlog__timestamp">08-Jun-20 02:45 PM</span>
+
+            <div class="chatlog__message " data-message-id="719479617001619497" id="message-719479617001619497">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">I don&#39;t really know you that much, but I was in a VC with you a couple of times long time ago and you&#39;re an awesome guy. Welcome back!!!</span>
+
+                        </div>
+                    </div>
+
+
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/embed/avatars/0.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Deleted User#0000" data-user-id="456226577798135808" style="">Deleted User</span>
+
+
+        <span class="chatlog__timestamp">08-Jun-20 02:54 PM</span>
+
+            <div class="chatlog__message " data-message-id="719482087496744971" id="message-719482087496744971">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">If Kamran liked you, ur a bloody great guy in my book. Welcome back Nadeem!</span>
+
+                        </div>
+                    </div>
+
+
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/627408157441916928/136e599e8d7e05fd3d99987500c75e7c.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="NightLight#2006" data-user-id="627408157441916928" style="">NightLight</span>
+
+
+        <span class="chatlog__timestamp">08-Jun-20 03:12 PM</span>
+
+            <div class="chatlog__message " data-message-id="719486419206275082" id="message-719486419206275082">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Welcome back!</span>
+
+                        </div>
+                    </div>
+
+
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/601276368436723723/e879eaae685f223f622b1d192bf67dda.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Saviour#6693" data-user-id="601276368436723723" style="color: rgb(87,131,235)">Harsh Sheth</span>
+
+
+        <span class="chatlog__timestamp">08-Jun-20 03:23 PM</span>
+
+            <div class="chatlog__message " data-message-id="719489298470011000" id="message-719489298470011000">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Welcome back,Nadeem.
+I remember the vc on Quora India server and how you use to motivate and say how self discipline is important. 
+Also making people laugh at the same time dude.</span>
+
+                        </div>
+                    </div>
+
+
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/555740383686950954/03e4d5118dc6e45442bbaf2667978e81.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="naima#4210" data-user-id="555740383686950954" style="">naima</span>
+
+
+        <span class="chatlog__timestamp">08-Jun-20 03:57 PM</span>
+
+            <div class="chatlog__message " data-message-id="719497783756849242" id="message-719497783756849242">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Welcome back, Nadeem! ❤️</span>
+
+                        </div>
+                    </div>
+
+
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/embed/avatars/0.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Mandeep#3335" data-user-id="653731452772417537" style="color: rgb(87,131,235)">Mandeep Singh</span>
+
+
+        <span class="chatlog__timestamp">08-Jun-20 04:04 PM</span>
+
+            <div class="chatlog__message " data-message-id="719499535948447744" id="message-719499535948447744">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Welcome back, Nadeem.. Have heard a lot about you and would be great to get to know you.. cheers <img class="emoji " alt="👍" title="👍" src="https://twemoji.maxcdn.com/2/72x72/1f44d.png"></span>
+
+                        </div>
+                    </div>
+
+
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/710910010980565073/5402879fb3fe15dfe3e176876cc1bb0a.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="euphoria#9264" data-user-id="710910010980565073" style="">euphoria</span>
+
+
+        <span class="chatlog__timestamp">08-Jun-20 06:10 PM</span>
+
+            <div class="chatlog__message " data-message-id="719531328160399461" id="message-719531328160399461">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Welcome back, Nadeem! <img class="emoji " alt="cookieboi" title="cookieboi" src="https://cdn.discordapp.com/emojis/589968263253852160.png"></span>
+
+                        </div>
+                    </div>
+
+
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/705751078641074226/711fecf6da66061c70f2d6938e29da7b.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Sunnyfunflower#3596" data-user-id="705751078641074226" style="">Sunnyfunflower</span>
+
+
+        <span class="chatlog__timestamp">08-Jun-20 06:47 PM</span>
+
+            <div class="chatlog__message " data-message-id="719540548129652757" id="message-719540548129652757">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">I&#39;m new here and to see everyone speak highly of you, I&#39;m so sure that you&#39;re an amazing person. While we all are sleeping peacefully in our homes, you make sure that we are safe. The amount of sacrifice the men in army does for the country can&#39;t be explained in words. I&#39;m so grateful and proud of you. Jai Hind ❤️ welcome back!<img class="emoji " alt="🌻" title="🌻" src="https://twemoji.maxcdn.com/2/72x72/1f33b.png"> Looking forward to interact with you <img class="emoji " alt="🤗" title="🤗" src="https://twemoji.maxcdn.com/2/72x72/1f917.png"></span>
+
+                        </div>
+                    </div>
+
+
+
+                    <div class="chatlog__reactions">
+                            <div class="chatlog__reaction">
+                                <img class="emoji emoji--small" alt="❤️" title="❤️" src="https://twemoji.maxcdn.com/2/72x72/2764.png">
+                                <span class="chatlog__reaction-count">2</span>
+                            </div>
+                    </div>
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/689133773648036041/4411b92ebeaceb18b36b19efc77f7911.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="if ronaldo was a girl and 14#1275" data-user-id="689133773648036041" style="">if ronaldo was a girl and 14</span>
+
+
+        <span class="chatlog__timestamp">08-Jun-20 08:56 PM</span>
+
+            <div class="chatlog__message " data-message-id="719573157278908457" id="message-719573157278908457">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Welcome back fellow eminem lover <img class="emoji " alt="😔" title="😔" src="https://twemoji.maxcdn.com/2/72x72/1f614.png"> i am pranpran. i&#39;m one of your most loyal comrades and i will always be on your side sir. <em>salutes</em> btw VOTE FOR NADEEM!</span>
+
+                        </div>
+                    </div>
+
+
+
+                    <div class="chatlog__reactions">
+                            <div class="chatlog__reaction">
+                                <img class="emoji emoji--small" alt="&#128013;" title="&#128013;" src="https://twemoji.maxcdn.com/2/72x72/1f40d.png">
+                                <span class="chatlog__reaction-count">7</span>
+                            </div>
+                            <div class="chatlog__reaction">
+                                <img class="emoji emoji--small" alt="&#128000;" title="&#128000;" src="https://twemoji.maxcdn.com/2/72x72/1f400.png">
+                                <span class="chatlog__reaction-count">3</span>
+                            </div>
+                    </div>
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/150261268249444352/0e0b8ccd3ead545299e8ad7957bd563e.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="shootingstar#7045" data-user-id="150261268249444352" style="color: rgb(87,131,235)">Pranshu Mittal</span>
+
+
+        <span class="chatlog__timestamp">08-Jun-20 09:49 PM</span>
+
+            <div class="chatlog__message " data-message-id="719586455193780307" id="message-719586455193780307">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Nadeem its sad that I never got the chance to interact much with you and know you more but I&#39;ve heard a lot from my friends, brothers and sisters here. I appreciate you for taking care of my sis Aishah and keeping my bros in check with your slangs.
+It&#39;ll be great to welcome you back and I really respect you for the noble service and sacrifice you do for our nation. As the other pran mentioned, it&#39;ll be great to exchange some eminem song recs when you&#39;re back.
+
+Okay I&#39;ll now finally end the cringefest by saying that - jaldi wapas aa bsdk abhi tanishq aur jayant waala delhi meetup baaki hai<img class="emoji " alt="😂" title="😂" src="https://twemoji.maxcdn.com/2/72x72/1f602.png"></span>
+
+                        </div>
+                    </div>
+
+
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/338635061442117632/2f6a3c91a86fc45d7a88ee0e16302e2b.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="ScoopsTroop#3240" data-user-id="338635061442117632" style="color: rgb(87,131,235)">Tanishq Sharma</span>
+
+
+        <span class="chatlog__timestamp">08-Jun-20 09:52 PM</span>
+
+            <div class="chatlog__message " data-message-id="719587111367606302" id="message-719587111367606302">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Hey comrade!
+It&#39;s been a long time since you threatened me with the June Vibes.Miss the fun VCs we used to have. Miss making memes on you.
+Miss listening bhenchod from you.
+See you soon! <img class="emoji " alt="💂" title="💂" src="https://twemoji.maxcdn.com/2/72x72/1f482.png"></span>
+
+                        </div>
+                    </div>
+
+
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/485200558995668993/e25a5aeaca4c0d6ab9014d66e832c997.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="sarayu#2914" data-user-id="485200558995668993" style="color: rgb(87,131,235)">Sarayu Nambiar</span>
+
+
+        <span class="chatlog__timestamp">08-Jun-20 10:10 PM</span>
+
+            <div class="chatlog__message " data-message-id="719591693229228052" id="message-719591693229228052">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">okay so we mods kinda hated you <s>that might actually be an understatement</s> but although i haven&#39;t interacted with you that much, the people that i care about that truly love you and if they like you, then i know that i definitely do as well :) thanks for taking care of my mummy Aishah because she needs protecting otherwise i won&#39;t have a mother periodttt <img class="emoji " alt="PandaLove" title="PandaLove" src="https://cdn.discordapp.com/emojis/620636639672139808.png"> welcome back!!! wooowoooo!!!</span>
+
+                        </div>
+                    </div>
+
+
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/537357983076843530/ac62509be72bc429ebf374665d0693ff.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="BogyokeOo#0246" data-user-id="537357983076843530" style="color: rgb(87,131,235)">Nathan Yang</span>
+
+
+        <span class="chatlog__timestamp">08-Jun-20 10:10 PM</span>
+
+            <div class="chatlog__message " data-message-id="719591776280772670" id="message-719591776280772670">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Nadeem did you like our bot?</span>
+
+                        </div>
+                    </div>
+
+
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/689377680210264075/a_333bb94999d64135bd2cbb83a512d8b7.gif" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="srija#5823" data-user-id="689377680210264075" style="color: rgb(252,25,112)">Srija</span>
+
+
+        <span class="chatlog__timestamp">08-Jun-20 10:11 PM</span>
+
+            <div class="chatlog__message " data-message-id="719591902101373090" id="message-719591902101373090">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Nadeem, we hardly interacted the last time you were here, but I&#39;ve heard numerous stories about you (and your super innovative curses). Sooooo, yeaahh, Welcome back!!</span>
+
+                        </div>
+                    </div>
+
+
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/662506308070539286/0d32951c7a0d187206ae4354e37c8d59.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="slimjim#1117" data-user-id="662506308070539286" style="">slimjim</span>
+
+
+        <span class="chatlog__timestamp">08-Jun-20 11:27 PM</span>
+
+            <div class="chatlog__message " data-message-id="719611051204804681" id="message-719611051204804681">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">I dunno you but i really respect and appreciate your sacrifice for your country, so welcome back! :)</span>
+
+                        </div>
+                    </div>
+
+
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/663757551913009178/a5b866bf4219fef576544a772b631d08.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="mallika._h#9086" data-user-id="663757551913009178" style="">mallika._h</span>
+
+
+        <span class="chatlog__timestamp">09-Jun-20 12:26 AM</span>
+
+            <div class="chatlog__message " data-message-id="719625923124527164" id="message-719625923124527164">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Hey Nadeem! I dont really know you personally but you seem like an absolutely terrific guy. Thank you for your service and welcome back!</span>
+
+                        </div>
+                    </div>
+
+
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/embed/avatars/0.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Deleted User#0000" data-user-id="456226577798135808" style="">Deleted User</span>
+
+
+        <span class="chatlog__timestamp">09-Jun-20 12:41 AM</span>
+
+            <div class="chatlog__message " data-message-id="719629805103874099" id="message-719629805103874099">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Hey Nadeem....welcome back!❤️❤️</span>
+
+                        </div>
+                    </div>
+
+
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/embed/avatars/0.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Deleted User#0000" data-user-id="456226577798135808" style="">Deleted User</span>
+
+
+        <span class="chatlog__timestamp">09-Jun-20 12:51 AM</span>
+
+            <div class="chatlog__message " data-message-id="719632112243835051" id="message-719632112243835051">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Hey Nadeem....!!! welcome back our soldier, the soul of our VCs. It always feel nice to interact with such an amazing person like you ......have learnt a lot of things from you .....WELCOME BACK ...!!!</span>
+
+                                <span class="chatlog__edited-timestamp" title="09-Jun-20 12:53 AM">(edited)</span>
+                        </div>
+                    </div>
+
+
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/278738513153884161/9a66689a73a0abb61566421cab3c9987.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Krishh#2706" data-user-id="278738513153884161" style="color: rgb(87,131,235)">Krishh</span>
+
+
+        <span class="chatlog__timestamp">09-Jun-20 01:24 AM</span>
+
+            <div class="chatlog__message " data-message-id="719640427602509885" id="message-719640427602509885">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Hoi nadeemo welcum back to your home boii, also hope you&#39;re doing great, I&#39;m happy for you and aishahhh, we wanna hear your stories in the camp and how your senior officer fucked you over <img class="emoji " alt="😂" title="😂" src="https://twemoji.maxcdn.com/2/72x72/1f602.png"><img class="emoji " alt="😂" title="😂" src="https://twemoji.maxcdn.com/2/72x72/1f602.png">. Have fun and jai hind! Thank you for protecting my home &lt;3</span>
+
+                        </div>
+                    </div>
+
+
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/399600130073821209/3b18514490d93e0a49bd7847595b4792.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Lukeass#8684" data-user-id="399600130073821209" style="color: rgb(87,131,235)">Luk&#225;š Mareš</span>
+
+
+        <span class="chatlog__timestamp">09-Jun-20 07:06 AM</span>
+
+            <div class="chatlog__message " data-message-id="719726569370943498" id="message-719726569370943498">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">hi nadeem welcome back and have these joke fights with aishah more often they’re hella fun</span>
+
+                        </div>
+                    </div>
+
+
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/443006485841313792/fc893d5eb9c8d7239ffe4bc4ee823445.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Lord Taco#6691" data-user-id="443006485841313792" style="">Lord Taco</span>
+
+
+        <span class="chatlog__timestamp">09-Jun-20 11:52 AM</span>
+
+            <div class="chatlog__message " data-message-id="719798467064627230" id="message-719798467064627230">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">missed ur bazooka jokes....and i hope u finally pitched to the military how awesome bader&#39;s gas weapons Co. is</span>
+
+                        </div>
+                    </div>
+
+
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/embed/avatars/4.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Neel#0674" data-user-id="537593701514477578" style="color: rgb(87,131,235)">Neel Vashisht</span>
+
+
+        <span class="chatlog__timestamp">09-Jun-20 05:44 PM</span>
+
+            <div class="chatlog__message " data-message-id="719887052497485864" id="message-719887052497485864">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">I’m completely new to this community, and even to discord to be honest I’m still not 100% sure how this app works <img class="emoji " alt="😂" title="😂" src="https://twemoji.maxcdn.com/2/72x72/1f602.png">. Having said that, seeing all these people share their memories and stories about you made me want to put a message into the mix! Thank you so much for your service in the army, Jai Hind, and welcome back!!</span>
+
+                        </div>
+                    </div>
+
+
+
+                    <div class="chatlog__reactions">
+                            <div class="chatlog__reaction">
+                                <img class="emoji emoji--small" alt="&#128077;" title="&#128077;" src="https://twemoji.maxcdn.com/2/72x72/1f44d.png">
+                                <span class="chatlog__reaction-count">2</span>
+                            </div>
+                    </div>
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/690948100197580870/8325df61c5f764cb27b745c3dd59a16a.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Rhus typhina#9215" data-user-id="690948100197580870" style="color: rgb(157,228,248)">Sarah Knitter</span>
+
+
+        <span class="chatlog__timestamp">09-Jun-20 06:10 PM</span>
+
+            <div class="chatlog__message " data-message-id="719893770103029781" id="message-719893770103029781">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Welcome back, Nadeem!</span>
+
+                        </div>
+                    </div>
+
+
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/embed/avatars/0.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Deleted User#0000" data-user-id="456226577798135808" style="">Deleted User</span>
+
+
+        <span class="chatlog__timestamp">09-Jun-20 06:33 PM</span>
+
+            <div class="chatlog__message " data-message-id="719899465586180176" id="message-719899465586180176">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">I have no clue what cheesy message to write so i&#39;m just going to put gay hearts ❤️ <img class="emoji " alt="🧡" title="🧡" src="https://twemoji.maxcdn.com/2/72x72/1f9e1.png"> <img class="emoji " alt="💛" title="💛" src="https://twemoji.maxcdn.com/2/72x72/1f49b.png"> <img class="emoji " alt="💚" title="💚" src="https://twemoji.maxcdn.com/2/72x72/1f49a.png"> <img class="emoji " alt="💙" title="💙" src="https://twemoji.maxcdn.com/2/72x72/1f499.png"> <img class="emoji " alt="💜" title="💜" src="https://twemoji.maxcdn.com/2/72x72/1f49c.png"> 
+<s>srsly welcome back</s></span>
+
+                        </div>
+                    </div>
+
+
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/embed/avatars/0.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Deleted User#0000" data-user-id="456226577798135808" style="">Deleted User</span>
+
+
+        <span class="chatlog__timestamp">10-Jun-20 07:12 AM</span>
+
+            <div class="chatlog__message " data-message-id="720090460210724895" id="message-720090460210724895">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Dear <span class="mention" title="Nadeem Akhtar#9649">@Lt. Nadeem Choudhury</span> 
+
+i&#39;ll start off with a gentle description.  
+
+I&#39;ll save everyone the reading time and just say that you&#39;re a very special person, who I&#39;m eternally grateful for having met. Beyond what you&#39;ve done here, I know that you&#39;re going to do some amazing things for people in this world, dude. You embody exactly what I always wanted all of us to be, friendly, humble, determined, capable, intelligent, forward-thinking, just, humorous and creative. And you take time to pass on all those traits to the people around you. Keep at it man, keep sharing your talents with the world, because bit by bit you&#39;re making it a better place.
+
+<strong>Read at your own risk, explicit content ahead :</strong>
+
+Gentleman
+
+<span class="spoiler spoiler--hidden" onclick="showSpoiler(event, this)"><span class="spoiler-text">Yaad mein tumhari kaati hain kayi raatein, logon ne na jaane kitne arsey se kiya hai intezaar ab toh maano jab wapas aaoge tabhi shuru hoga apna next war. (abdullah part 2 <img class="emoji " alt="😁" title="😁" src="https://twemoji.maxcdn.com/2/72x72/1f601.png"> )</span></span>
+<span class="spoiler spoiler--hidden" onclick="showSpoiler(event, this)"><span class="spoiler-text">Wo screenshot ki kahani hai badi purani jisme apne naadan launde <em>Nadeem</em> ne na jaane kya kya bola tha, aur apni gand se nikla zeher QC mein ghola tha</span></span>
+<span class="spoiler spoiler--hidden" onclick="showSpoiler(event, this)"><span class="spoiler-text">Mods ke beech sabse hated banda, kab favourite ban jayega, yeh kisne socha tha ki aisa time bhi aayega (ho toh tum madarchod hi, mind the pun)</span></span>
+Here is your to do list :
+<span class="spoiler spoiler--hidden" onclick="showSpoiler(event, this)"><span class="spoiler-text">Divy ke liye toh tumhe pata hi hai <img class="emoji " alt="👀" title="👀" src="https://twemoji.maxcdn.com/2/72x72/1f440.png"></span></span> 
+<span class="spoiler spoiler--hidden" onclick="showSpoiler(event, this)"><span class="spoiler-text">Amos bhosdike ne abhi bhi 40 saal ki randi wala drama nahi chhoda, uska alag hisaab lena hai</span></span>
+<span class="spoiler spoiler--hidden" onclick="showSpoiler(event, this)"><span class="spoiler-text">LuvDe ke alag mood swings hote hain, uski gand ki sutai bhi zaruri hai</span></span>
+<span class="spoiler spoiler--hidden" onclick="showSpoiler(event, this)"><span class="spoiler-text"> Tanisha (tanishq) randi is missing you too, unki Harry Potter apparels ki dukan khuli hai, uska inauguration  bhi karna hai Delhi ja ke</span></span>
+<strong>Ganji madarchod hai</strong>
+<span class="spoiler spoiler--hidden" onclick="showSpoiler(event, this)"><span class="spoiler-text">Hardik ko bhi maaf nahi karna <img class="emoji " alt="Ha" title="Ha" src="https://cdn.discordapp.com/emojis/629615794094997505.png"> Snitch hai bhosdika</span></span>
+
+<span class="spoiler spoiler--hidden" onclick="showSpoiler(event, this)"><span class="spoiler-text">Khair, in sab ki toh daily lete rahenge, but apne liye 10 litre tel bacha ke rakha, the journey is going to be rough in here, aage tu samajhdar hai <img class="emoji " alt="Ha" title="Ha" src="https://cdn.discordapp.com/emojis/629615794094997505.png"></span></span>
+
+tl;dr
+
+<span class="spoiler spoiler--hidden" onclick="showSpoiler(event, this)"><span class="spoiler-text">sabki gand toh maar loge, but apni kaise bachaoge?</span></span>
+
+okibai</span>
+
+                        </div>
+                    </div>
+
+
+
+                    <div class="chatlog__reactions">
+                            <div class="chatlog__reaction">
+                                <img class="emoji emoji--small" alt="Ha" title="Ha" src="https://cdn.discordapp.com/emojis/629615794094997505.png">
+                                <span class="chatlog__reaction-count">6</span>
+                            </div>
+                    </div>
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/696772645173198879/dfe252e4e2a1762bbe202a78a7492846.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Lord_Zeus#7275" data-user-id="696772645173198879" style="color: rgb(87,131,235)">Amos Mordecai</span>
+
+
+        <span class="chatlog__timestamp">10-Jun-20 09:12 AM</span>
+
+            <div class="chatlog__message " data-message-id="720120632867553331" id="message-720120632867553331">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><img class="emoji emoji--large" alt="😂" title="😂" src="https://twemoji.maxcdn.com/2/72x72/1f602.png"></span>
+
+                        </div>
+                    </div>
+
+
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/461637566563876874/a_bd904dd6a031dd7328febe2148c34658.gif" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Bluelikesflags01#0825" data-user-id="461637566563876874" style="color: rgb(87,131,235)">Indigo Portugal</span>
+
+
+        <span class="chatlog__timestamp">10-Jun-20 11:04 AM</span>
+
+            <div class="chatlog__message " data-message-id="720148796256026667" id="message-720148796256026667">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Hey <span class="mention" title="Nadeem Akhtar#9649">@Lt. Nadeem Choudhury</span>. Although I barely got to know you, you were a pretty cool guy. I liked your jokes about the bazooka, they were funny. I’m astonished that you made a huge contribution to the server. Because I legit didn’t think there would be a bot named after you. I made a meme of you that I want to show you when you come back because it is f*cking hilarious xD. Anyways I appreciate you, you were a funny guy and I hope you come back soon. Oh ya and stay safe ^_^</span>
+
+                        </div>
+                    </div>
+
+
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/691854224673341440/b8afcc6b6ee3c7903d796e42c58695bd.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="true#3768" data-user-id="691854224673341440" style="color: rgb(87,131,235)">Varun Kumar</span>
+
+
+        <span class="chatlog__timestamp">10-Jun-20 11:20 AM</span>
+
+            <div class="chatlog__message " data-message-id="720152863971606590" id="message-720152863971606590">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Welcome back nadeem :)</span>
+
+                        </div>
+                    </div>
+
+
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/510448896284164106/8982ac32714ed84ad8e79edca67469fd.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="InstinctComplete#2130" data-user-id="510448896284164106" style="color: rgb(87,131,235)">Jayant Kumar</span>
+
+
+        <span class="chatlog__timestamp">10-Jun-20 11:33 PM</span>
+
+            <div class="chatlog__message " data-message-id="720337376165101631" id="message-720337376165101631">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">eyyy welcome back bazookaman really miss the bhenchods</span>
+
+                        </div>
+                    </div>
+
+
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/535381322844340234/0ca9e6180b89168726c4a3820677d62e.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="neuralinked_hyperlooped#5882" data-user-id="535381322844340234" style="">neuralinked_hyperlooped</span>
+
+
+        <span class="chatlog__timestamp">11-Jun-20 01:45 AM</span>
+
+            <div class="chatlog__message " data-message-id="720370503071563877" id="message-720370503071563877">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Welcome back Nadeem, beta <em>idhar aa</em> :b</span>
+
+                        </div>
+                    </div>
+
+
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/519927226280443928/8adb83663f3310e4c7f8b0ecbb030edd.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Aishah Hannan#7828" data-user-id="519927226280443928" style="color: rgb(240,99,3)">Aishah Hannan</span>
+
+
+        <span class="chatlog__timestamp">11-Jun-20 02:03 PM</span>
+
+            <div class="chatlog__message " data-message-id="720556224831291414" id="message-720556224831291414">
+
+                    <div class="chatlog__attachment">
+                        <div class="" onclick="">
+                            <div class="">
+                                    <a href="https://cdn.discordapp.com/attachments/715630063596601415/720556224722108466/Screenshot_20200611-093240.jpg">
+                                        <img class="chatlog__attachment-thumbnail" src="https://cdn.discordapp.com/attachments/715630063596601415/720556224722108466/Screenshot_20200611-093240.jpg" alt="Image attachment" title="Image: Screenshot_20200611-093240.jpg (158.39 KB)">
+                                    </a>
+                            </div>
+                        </div>
+                    </div>
+
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/embed/avatars/0.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Deleted User#0000" data-user-id="456226577798135808" style="">Deleted User</span>
+
+
+        <span class="chatlog__timestamp">11-Jun-20 02:03 PM</span>
+
+            <div class="chatlog__message " data-message-id="720556375981162568" id="message-720556375981162568">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Hey Nadeem, I know you don&#39;t know me, but I appreciate that you&#39;re coming back. How was your training btw? I am eager to hear your experience with the Army. So glad that you&#39;re back man.</span>
+
+                        </div>
+                    </div>
+
+
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/557206929118593024/67d36832bc9e348d29a74f4b9885da04.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Lord Chaos#9393" data-user-id="557206929118593024" style="color: rgb(87,131,235)">Anuj Sharma</span>
+
+
+        <span class="chatlog__timestamp">11-Jun-20 06:21 PM</span>
+
+            <div class="chatlog__message " data-message-id="720621130641047564" id="message-720621130641047564">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Hey nadeem welcome back!!</span>
+
+                        </div>
+                    </div>
+
+
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/714399095208411167/3bd1264019abf0fcabc4f10b1d7cc4aa.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="This-Chorder#1833" data-user-id="714399095208411167" style="">This-Chorder</span>
+
+
+        <span class="chatlog__timestamp">11-Jun-20 06:52 PM</span>
+
+            <div class="chatlog__message " data-message-id="720629039425126500" id="message-720629039425126500">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Welcome back Nadeem!</span>
+
+                        </div>
+                    </div>
+
+
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/662990779370700831/a_c345808883c71b7d25aac42f654fe8ff.gif" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="libellule.#2222" data-user-id="662990779370700831" style="color: rgb(87,131,235)">An Huynh</span>
+
+
+        <span class="chatlog__timestamp">11-Jun-20 07:02 PM</span>
+
+            <div class="chatlog__message " data-message-id="720631476500168774" id="message-720631476500168774">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><img class="emoji emoji--large" alt="🐳" title="🐳" src="https://twemoji.maxcdn.com/2/72x72/1f433.png"> <img class="emoji emoji--large" alt="Cum" title="Cum" src="https://cdn.discordapp.com/emojis/581394469790941194.png"> <img class="emoji emoji--large" alt="🔙" title="🔙" src="https://twemoji.maxcdn.com/2/72x72/1f519.png"></span>
+
+                        </div>
+                    </div>
+
+
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/392271349860663297/580bc3d87b2b098f9f0eec2c5e16c957.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="mais#4801" data-user-id="392271349860663297" style="color: rgb(193,29,245)">Mais Sabbagh</span>
+
+
+        <span class="chatlog__timestamp">11-Jun-20 09:28 PM</span>
+
+            <div class="chatlog__message " data-message-id="720668371753893900" id="message-720668371753893900">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Nearly 80 days away from us dulabhai, and it&#39;s like not a single aspect of things between you and us has changed, and that&#39;s the best part of your coming back. It&#39;s an anticipation, an excitement, for everything to be the same again, because with all your fucking crackhead energy, you somehow make it stable. <img class="emoji " alt="😣" title="😣" src="https://twemoji.maxcdn.com/2/72x72/1f623.png">
+
+But that&#39;s the beautiful thing about your ties with us, and about you, and it&#39;s that in your depart, we don&#39;t wait to stop missing your presence, we wait until we no longer have to, and although it has been quite the excruciating wait, for us, your friends, and especially for you and a very special someone here, the energy and the excitement that has built up in the last few months, the desire- will make that moment of reunion the best thing to encounter either of your lives. A test of patience and strength, rewarded with a day like today. 
+
+Thank youuuuuu Nadeem for the constant splurs of insults that make you uniquely you, for your wild and crazy side that brings the most afraid people out of their shells and into a profound light, for helping me with chemistry, for being so patient, for your perpetual cheerfulness despite how hard things may get, for the service you are providing to your country (i like to consider myself part Indian bc JAI HIND PERIODT<img class="emoji " alt="🇮🇳" title="🇮🇳" src="https://twemoji.maxcdn.com/2/72x72/1f1ee-1f1f3.png"><img class="emoji " alt="💚" title="💚" src="https://twemoji.maxcdn.com/2/72x72/1f49a.png">) and above all, for never treating my sister as any less of a queen <img class="emoji " alt="🌝" title="🌝" src="https://twemoji.maxcdn.com/2/72x72/1f31d.png"><img class="emoji " alt="👑" title="👑" src="https://twemoji.maxcdn.com/2/72x72/1f451.png">
+
+Everyone here has awaited this day, so many people have missed you everyday and your absence was felt, from the very moment you left that VC that afternoon...
+
+Yes, you are an absolute idiot for getting yourself into this mess u madarchod <img class="emoji " alt="nadeem" title="nadeem" src="https://cdn.discordapp.com/emojis/715958443453972502.png"> but nonetheless, you&#39;re our crackhead soldier and Kuwaiti Benzene Spaz is ready to shower you with annoyingness, timtoks, buzzfeed quizzes, and of course, carbonic acid <img class="emoji " alt="💋" title="💋" src="https://twemoji.maxcdn.com/2/72x72/1f48b.png"><img class="emoji " alt="🌝" title="🌝" src="https://twemoji.maxcdn.com/2/72x72/1f31d.png">
+
+WELCOME BAAAACKKKK DULABHAAIIIII, it was never the same without you! <img class="emoji " alt="🗡" title="🗡" src="https://twemoji.maxcdn.com/2/72x72/1f5e1.png">️<img class="emoji " alt="tom" title="tom" src="https://cdn.discordapp.com/emojis/618822180742103043.png"> ❤️</span>
+
+                                <span class="chatlog__edited-timestamp" title="11-Jun-20 09:30 PM">(edited)</span>
+                        </div>
+                    </div>
+
+
+
+                    <div class="chatlog__reactions">
+                            <div class="chatlog__reaction">
+                                <img class="emoji emoji--small" alt="upvote" title="upvote" src="https://cdn.discordapp.com/emojis/607009628236152852.png">
+                                <span class="chatlog__reaction-count">15</span>
+                            </div>
+                            <div class="chatlog__reaction">
+                                <img class="emoji emoji--small" alt="feelsbadman" title="feelsbadman" src="https://cdn.discordapp.com/emojis/592678947322331146.png">
+                                <span class="chatlog__reaction-count">9</span>
+                            </div>
+                            <div class="chatlog__reaction">
+                                <img class="emoji emoji--small" alt="PandaLove" title="PandaLove" src="https://cdn.discordapp.com/emojis/620636639672139808.png">
+                                <span class="chatlog__reaction-count">8</span>
+                            </div>
+                            <div class="chatlog__reaction">
+                                <img class="emoji emoji--small" alt="tom" title="tom" src="https://cdn.discordapp.com/emojis/618822180742103043.png">
+                                <span class="chatlog__reaction-count">7</span>
+                            </div>
+                            <div class="chatlog__reaction">
+                                <img class="emoji emoji--small" alt="&#128481;️" title="&#128481;️" src="https://twemoji.maxcdn.com/2/72x72/1f5e1.png">
+                                <span class="chatlog__reaction-count">7</span>
+                            </div>
+                            <div class="chatlog__reaction">
+                                <img class="emoji emoji--small" alt="Ha" title="Ha" src="https://cdn.discordapp.com/emojis/629615794094997505.png">
+                                <span class="chatlog__reaction-count">7</span>
+                            </div>
+                            <div class="chatlog__reaction">
+                                <img class="emoji emoji--small" alt="nadeem" title="nadeem" src="https://cdn.discordapp.com/emojis/715958443453972502.png">
+                                <span class="chatlog__reaction-count">5</span>
+                            </div>
+                    </div>
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/381092789875900417/8f95bd11762f8c9e3e2df3bccf455d5a.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="marxplank#9474" data-user-id="381092789875900417" style="color: rgb(87,131,235)">Akshit Kumar</span>
+
+
+        <span class="chatlog__timestamp">11-Jun-20 11:21 PM</span>
+
+            <div class="chatlog__message " data-message-id="720696605103226961" id="message-720696605103226961">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">I&#39;m glad you&#39;re coming back, Nadeem. Waiting to see the events unfold when you actually click on the invite link.</span>
+
+                        </div>
+                    </div>
+
+
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/392271349860663297/580bc3d87b2b098f9f0eec2c5e16c957.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="mais#4801" data-user-id="392271349860663297" style="color: rgb(193,29,245)">Mais Sabbagh</span>
+
+
+        <span class="chatlog__timestamp">12-Jun-20 03:32 AM</span>
+
+            <div class="chatlog__message " data-message-id="720760017955061921" id="message-720760017955061921">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><span class="mention" title="marxplank#9474">@Akshit Kumar</span> he&#39;s still here doe he just doesnt have the roles<img class="emoji " alt="😭" title="😭" src="https://twemoji.maxcdn.com/2/72x72/1f62d.png"></span>
+
+                        </div>
+                    </div>
+
+
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/696772645173198879/dfe252e4e2a1762bbe202a78a7492846.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Lord_Zeus#7275" data-user-id="696772645173198879" style="color: rgb(87,131,235)">Amos Mordecai</span>
+
+
+        <span class="chatlog__timestamp">12-Jun-20 01:30 PM</span>
+
+            <div class="chatlog__message " data-message-id="720910344104575036" id="message-720910344104575036">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Finally this one</span>
+
+                        </div>
+                    </div>
+
+                    <div class="chatlog__attachment">
+                        <div class="" onclick="">
+                            <div class="">
+                                    <a href="https://cdn.discordapp.com/attachments/715630063596601415/720910343693402132/Screenshot_2020-06-12_132923.jpg">
+                                        <img class="chatlog__attachment-thumbnail" src="https://cdn.discordapp.com/attachments/715630063596601415/720910343693402132/Screenshot_2020-06-12_132923.jpg" alt="Image attachment" title="Image: Screenshot_2020-06-12_132923.jpg (539.2 KB)">
+                                    </a>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="chatlog__reactions">
+                            <div class="chatlog__reaction">
+                                <img class="emoji emoji--small" alt="upvote" title="upvote" src="https://cdn.discordapp.com/emojis/607009628236152852.png">
+                                <span class="chatlog__reaction-count">5</span>
+                            </div>
+                            <div class="chatlog__reaction">
+                                <img class="emoji emoji--small" alt="Ha" title="Ha" src="https://cdn.discordapp.com/emojis/629615794094997505.png">
+                                <span class="chatlog__reaction-count">2</span>
+                            </div>
+                    </div>
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/338635061442117632/2f6a3c91a86fc45d7a88ee0e16302e2b.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="ScoopsTroop#3240" data-user-id="338635061442117632" style="color: rgb(87,131,235)">Tanishq Sharma</span>
+
+
+        <span class="chatlog__timestamp">12-Jun-20 01:53 PM</span>
+
+            <div class="chatlog__message " data-message-id="720916088682184704" id="message-720916088682184704">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">March : Idhar aa
+June : Nikal Lawde</span>
+
+                                <span class="chatlog__edited-timestamp" title="12-Jun-20 01:53 PM">(edited)</span>
+                        </div>
+                    </div>
+
+
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/716082285941751809/bd1f2e96b3611385485fe3b6334185d7.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="GautamSharma#8426" data-user-id="716082285941751809" style="color: rgb(87,131,235)">Hamza Ahmed</span>
+
+
+        <span class="chatlog__timestamp">12-Jun-20 03:19 PM</span>
+
+            <div class="chatlog__message " data-message-id="720937901503938570" id="message-720937901503938570">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Nadeem bhai i dont have much to say. Uhhhh welcome back bb. I&#39;ve been missing your nudes in our DMs for 78 nights now</span>
+
+                        </div>
+                    </div>
+
+
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/465495822885191680/c81084f5dcc0dc342b5d17a820e75046.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Alexschemman13#2724" data-user-id="465495822885191680" style="color: rgb(245,239,92)">Hardik Solanki</span>
+
+
+        <span class="chatlog__timestamp">12-Jun-20 03:41 PM</span>
+
+            <div class="chatlog__message " data-message-id="720943378065260634" id="message-720943378065260634">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">bc mc sab kuch boldena muje but welcome back and waiting for you to curse the shit out of Jesal</span>
+
+                        </div>
+                    </div>
+
+
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/588646589887938580/eae27e1b32a548eb06242e918662fb56.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Nadeem Akhtar#9649" data-user-id="588646589887938580" style="color: rgb(252,25,112)">Lt. Nadeem Choudhury</span>
+
+
+        <span class="chatlog__timestamp">12-Jun-20 06:17 PM</span>
+
+            <div class="chatlog__message " data-message-id="720982499383181372" id="message-720982499383181372">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><span class="mention" title="Alexschemman13#2724">@Hardik Solanki</span> bhaiyaji jesal sahaab ko boliye gaand aur kaan dono mei Tann ke tel lga le..... Buri Tarah Pele jayenge..... Amos tu bhi nhi bachega.... Bahut sona hai na chomu raandi kuttiya saali bhosdiwaali choot..... Aisa gaand marunga ki zindagi bhar apni biwi ko bolega aaj kar nhi paunga bahut dard ho rha hai....</span>
+
+                        </div>
+                    </div>
+
+
+
+                    <div class="chatlog__reactions">
+                            <div class="chatlog__reaction">
+                                <img class="emoji emoji--small" alt="upvote" title="upvote" src="https://cdn.discordapp.com/emojis/607009628236152852.png">
+                                <span class="chatlog__reaction-count">4</span>
+                            </div>
+                            <div class="chatlog__reaction">
+                                <img class="emoji emoji--small" alt="&#127473;" title="&#127473;" src="https://twemoji.maxcdn.com/2/72x72/1f1f1.png">
+                                <span class="chatlog__reaction-count">5</span>
+                            </div>
+                            <div class="chatlog__reaction">
+                                <img class="emoji emoji--small" alt="&#127486;" title="&#127486;" src="https://twemoji.maxcdn.com/2/72x72/1f1fe.png">
+                                <span class="chatlog__reaction-count">5</span>
+                            </div>
+                            <div class="chatlog__reaction">
+                                <img class="emoji emoji--small" alt="hehe" title="hehe" src="https://cdn.discordapp.com/emojis/678498522777255967.png">
+                                <span class="chatlog__reaction-count">3</span>
+                            </div>
+                    </div>
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/588646589887938580/eae27e1b32a548eb06242e918662fb56.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Nadeem Akhtar#9649" data-user-id="588646589887938580" style="color: rgb(252,25,112)">Lt. Nadeem Choudhury</span>
+
+
+        <span class="chatlog__timestamp">12-Jun-20 06:24 PM</span>
+
+            <div class="chatlog__message " data-message-id="720984297737158726" id="message-720984297737158726">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">First of all this is damn overwhelming.... I can&#39;t..... Fuckkkkkk....... Fk you mikund divy luv Amos tanishq hardik shubham every goddamn mother fucker..... You like to make me cry butch wait till I get your ass shoved in your mouth bhosdiwaale...</span>
+
+                        </div>
+                    </div>
+
+
+
+                    <div class="chatlog__reactions">
+                            <div class="chatlog__reaction">
+                                <img class="emoji emoji--small" alt="GWvertiPeepoSalute" title="GWvertiPeepoSalute" src="https://cdn.discordapp.com/emojis/405951690034905089.png">
+                                <span class="chatlog__reaction-count">1</span>
+                            </div>
+                    </div>
+            </div>
+            <div class="chatlog__message " data-message-id="720984327311065188" id="message-720984327311065188">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">And answer is appreciation</span>
+
+                        </div>
+                    </div>
+
+
+
+            </div>
+            <div class="chatlog__message " data-message-id="720984789175500820" id="message-720984789175500820">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Our soldier.... Dayumm the channel name...... Yumiiii your flag... By far the perfect ashok Chakra I&#39;ve ever seen.... Although it doesn&#39;t have 24 spokes but that drawing immq cherish it forever.... And Amos your drawing lvde.... We&#39;re you drawing in your sleep</span>
+
+                        </div>
+                    </div>
+
+
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/519927226280443928/8adb83663f3310e4c7f8b0ecbb030edd.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Aishah Hannan#7828" data-user-id="519927226280443928" style="color: rgb(240,99,3)">Aishah Hannan</span>
+
+
+        <span class="chatlog__timestamp">04-Sep-20 11:26 PM</span>
+
+            <div class="chatlog__message " data-message-id="751501072085942403" id="message-751501072085942403">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">I&#39;ll appreciate you every day until the day you&#39;re back &amp; forever <img class="emoji " alt="♥" title="♥" src="https://twemoji.maxcdn.com/2/72x72/2665.png">️</span>
+
+                                <span class="chatlog__edited-timestamp" title="10-Oct-20 03:32 AM">(edited)</span>
+                        </div>
+                    </div>
+
+
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/519927226280443928/8adb83663f3310e4c7f8b0ecbb030edd.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Aishah Hannan#7828" data-user-id="519927226280443928" style="color: rgb(240,99,3)">Aishah Hannan</span>
+
+
+        <span class="chatlog__timestamp">05-Sep-20 03:36 AM</span>
+
+            <div class="chatlog__message " data-message-id="751563833348194465" id="message-751563833348194465">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><strong>Day 1 - 03/09/2020</strong>
+I appreciate the way you greet me with a Salaam every time we call...It&#39;s so refreshing and brings a smile to my face every time I hear it <img class="emoji " alt="😊" title="😊" src="https://twemoji.maxcdn.com/2/72x72/1f60a.png"></span>
+
+                                <span class="chatlog__edited-timestamp" title="10-Oct-20 03:31 AM">(edited)</span>
+                        </div>
+                    </div>
+
+
+
+            </div>
+            <div class="chatlog__message " data-message-id="751564720066002966" id="message-751564720066002966">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><strong>Day 2 - 04/09/2020</strong> 
+I appreciate the immense love you have for your family, especially your mother. She&#39;s such a strong woman Mashallah and has gone through so much. You worry about her alot but you always find ways to stay grounded when those feelings occur <img class="emoji " alt="♥" title="♥" src="https://twemoji.maxcdn.com/2/72x72/2665.png">️<img class="emoji " alt="👩" title="👩" src="https://twemoji.maxcdn.com/2/72x72/1f469.png">‍<img class="emoji " alt="👦" title="👦" src="https://twemoji.maxcdn.com/2/72x72/1f466.png"></span>
+
+                                <span class="chatlog__edited-timestamp" title="10-Oct-20 03:31 AM">(edited)</span>
+                        </div>
+                    </div>
+
+
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/519927226280443928/8adb83663f3310e4c7f8b0ecbb030edd.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Aishah Hannan#7828" data-user-id="519927226280443928" style="color: rgb(240,99,3)">Aishah Hannan</span>
+
+
+        <span class="chatlog__timestamp">05-Sep-20 03:15 PM</span>
+
+            <div class="chatlog__message " data-message-id="751739877766332458" id="message-751739877766332458">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><strong>Day 3 - 05/09/2020</strong>
+Our soldier, their soldier, that&#39;s exactly what you are and I&#39;m so proud of you for having the strength and courage to serve your country and people! I appreciate all that you endure, the physical punishments, the mental turmoil and through it all, you&#39;re still able to come back with a smile and say &quot;I can do anything!&quot;. The strongest person I&#39;ve ever met and will ever meet and following this, I&#39;d expect everyone on Quocomm to shower you with the love and care that you deserve <img class="emoji " alt="⚔" title="⚔" src="https://twemoji.maxcdn.com/2/72x72/2694.png">️</span>
+
+                                <span class="chatlog__edited-timestamp" title="10-Oct-20 03:31 AM">(edited)</span>
+                        </div>
+                    </div>
+
+
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/519927226280443928/8adb83663f3310e4c7f8b0ecbb030edd.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Aishah Hannan#7828" data-user-id="519927226280443928" style="color: rgb(240,99,3)">Aishah Hannan</span>
+
+
+        <span class="chatlog__timestamp">06-Sep-20 05:40 PM</span>
+
+            <div class="chatlog__message " data-message-id="752138717509976085" id="message-752138717509976085">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><strong>Day 4 - 06/09/2020</strong>
+
+Apart from the 30 minutes, broken up phone call that I get with you everyday, typing these are the second best part of my day <img class="emoji " alt="😊" title="😊" src="https://twemoji.maxcdn.com/2/72x72/1f60a.png">
+One trait that I adore the most about you is how non-judgemental you are. No matter the person&#39;s beliefs, character, whether they&#39;ve ever wronged you in the past or not, you still find the good in them, even if the good may seem non-existent to others! 
+
+You welcome everyone with open-arms, and you hear people out without jumping to assumptions and conclusions. Not many are able to do that but you, you do it so naturally. I applaud you for that <img class="emoji " alt="♥" title="♥" src="https://twemoji.maxcdn.com/2/72x72/2665.png">️<img class="emoji " alt="👑" title="👑" src="https://twemoji.maxcdn.com/2/72x72/1f451.png"></span>
+
+                                <span class="chatlog__edited-timestamp" title="06-Sep-20 10:21 PM">(edited)</span>
+                        </div>
+                    </div>
+
+
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/519927226280443928/8adb83663f3310e4c7f8b0ecbb030edd.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Aishah Hannan#7828" data-user-id="519927226280443928" style="color: rgb(240,99,3)">Aishah Hannan</span>
+
+
+        <span class="chatlog__timestamp">07-Sep-20 03:03 PM</span>
+
+            <div class="chatlog__message " data-message-id="752461446016663552" id="message-752461446016663552">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><strong>Day 5 - 07/09/2020</strong>
+<em>&quot;Wait wait...have you heard about this one before?!&quot;</em> -- I love how we&#39;re both so intellectually in tune! The way we spend many evenings just teaching each other about the wonders of the world! We get a high from gaining knowledge and it excites us to want to know more. Reading articles, reading non-fiction books together, then writing down what we&#39;ve learnt, as if we&#39;re in a classroom, ah, it&#39;s so much fun! <img class="emoji " alt="🧠" title="🧠" src="https://twemoji.maxcdn.com/2/72x72/1f9e0.png">✍️</span>
+
+                                <span class="chatlog__edited-timestamp" title="10-Oct-20 03:21 AM">(edited)</span>
+                        </div>
+                    </div>
+
+
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/519927226280443928/8adb83663f3310e4c7f8b0ecbb030edd.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Aishah Hannan#7828" data-user-id="519927226280443928" style="color: rgb(240,99,3)">Aishah Hannan</span>
+
+
+        <span class="chatlog__timestamp">08-Sep-20 10:55 PM</span>
+
+            <div class="chatlog__message " data-message-id="752942765595295784" id="message-752942765595295784">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><strong>Day 6 - 08/09/2020</strong>
+Your humility, let&#39;s talk about that! I love how when you meet somebody new, your initial instinct is to get to know them first and to make them feel welcome. Whilst most people in your position would flaunt their occupation, here you are, not making a sound unless somebody asks! I love that about you...
+Sure it&#39;s a big deal, but you never make it seem that way. &quot;We&#39;re all the same at the end of the day, we&#39;re all equal&quot; is what you always say. Absolute king! <img class="emoji " alt="👑" title="👑" src="https://twemoji.maxcdn.com/2/72x72/1f451.png">❣️<img class="emoji " alt="💂" title="💂" src="https://twemoji.maxcdn.com/2/72x72/1f482.png"></span>
+
+                                <span class="chatlog__edited-timestamp" title="10-Oct-20 03:21 AM">(edited)</span>
+                        </div>
+                    </div>
+
+
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/519927226280443928/8adb83663f3310e4c7f8b0ecbb030edd.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Aishah Hannan#7828" data-user-id="519927226280443928" style="color: rgb(240,99,3)">Aishah Hannan</span>
+
+
+        <span class="chatlog__timestamp">10-Sep-20 12:02 AM</span>
+
+            <div class="chatlog__message " data-message-id="753321912259575908" id="message-753321912259575908">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><strong>Day 7 - 09/09/2020</strong>
+PEW PEW PEW! The way you laugh at me imitating gunshots <img class="emoji " alt="😂" title="😂" src="https://twemoji.maxcdn.com/2/72x72/1f602.png"> I love how we both have a love for rifles, the way we can spend hours discussing it&#39;s sound, the way it feels in your hand, types of ammo, reload speed, it&#39;s recoil, how well it damages the enemy short and long distance, ahh literally everything! From start to finish, we discuss guns like Asian aunties gossiping and sipping tea. We fangirl over rifles like Mais fangirls over Selena Gomez <img class="emoji " alt="😂" title="😂" src="https://twemoji.maxcdn.com/2/72x72/1f602.png">
+
+If a normie were to sit in our conversations and listen to us, they&#39;d think we&#39;re both psychos, but I assure you, we&#39;re not! Guns are just fascinating and sexy in the most educational of ways <img class="emoji " alt="😣" title="😣" src="https://twemoji.maxcdn.com/2/72x72/1f623.png"><img class="emoji " alt="😊" title="😊" src="https://twemoji.maxcdn.com/2/72x72/1f60a.png"></span>
+
+                                <span class="chatlog__edited-timestamp" title="10-Oct-20 03:21 AM">(edited)</span>
+                        </div>
+                    </div>
+
+
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/519927226280443928/8adb83663f3310e4c7f8b0ecbb030edd.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Aishah Hannan#7828" data-user-id="519927226280443928" style="color: rgb(240,99,3)">Aishah Hannan</span>
+
+
+        <span class="chatlog__timestamp">11-Sep-20 01:52 PM</span>
+
+            <div class="chatlog__message " data-message-id="753893177064423477" id="message-753893177064423477">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><strong>Day 8 - 10/09/2020</strong> 
+&quot;You can do it!&quot; You&#39;re my biggest motivator, pushing me to go above and beyond what I&#39;m capable of! Your successes are my successes and vice versa, and we take pride in our accomplishments! Some may call it arrogant, we just call it self-confidence <img class="emoji " alt="😉" title="😉" src="https://twemoji.maxcdn.com/2/72x72/1f609.png"></span>
+
+                                <span class="chatlog__edited-timestamp" title="10-Oct-20 03:21 AM">(edited)</span>
+                        </div>
+                    </div>
+
+
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/519927226280443928/8adb83663f3310e4c7f8b0ecbb030edd.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Aishah Hannan#7828" data-user-id="519927226280443928" style="color: rgb(240,99,3)">Aishah Hannan</span>
+
+
+        <span class="chatlog__timestamp">11-Sep-20 10:43 PM</span>
+
+            <div class="chatlog__message " data-message-id="754026919137116271" id="message-754026919137116271">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><strong>Day 9 - 11/09/2020</strong> 
+It&#39;s funny how we&#39;re both incredibly stubborn yet make each other less stubborn when it comes to making decisions? How does that even work?? <img class="emoji " alt="😂" title="😂" src="https://twemoji.maxcdn.com/2/72x72/1f602.png"></span>
+
+                                <span class="chatlog__edited-timestamp" title="10-Oct-20 03:21 AM">(edited)</span>
+                        </div>
+                    </div>
+
+
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/519927226280443928/8adb83663f3310e4c7f8b0ecbb030edd.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Aishah Hannan#7828" data-user-id="519927226280443928" style="color: rgb(240,99,3)">Aishah Hannan</span>
+
+
+        <span class="chatlog__timestamp">13-Sep-20 02:56 PM</span>
+
+            <div class="chatlog__message " data-message-id="754634082046050366" id="message-754634082046050366">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><strong>Day 10 - 12/09/2020</strong>
+I really wish you were here...
+
+Yesterday was the first day in 10 days that my mind screamed for you. People don&#39;t realize the amount of patience and strength that needs to go into a military relationship. Your presence enough brings me ease; I feel safe with you. But I know I can&#39;t always have that and I&#39;m happy that I&#39;ve accepted and adapted to this lifestyle quickly... 
+
+Thank you for giving me this honor ❤️</span>
+
+                                <span class="chatlog__edited-timestamp" title="10-Oct-20 03:21 AM">(edited)</span>
+                        </div>
+                    </div>
+
+
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/519927226280443928/8adb83663f3310e4c7f8b0ecbb030edd.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Aishah Hannan#7828" data-user-id="519927226280443928" style="color: rgb(240,99,3)">Aishah Hannan</span>
+
+
+        <span class="chatlog__timestamp">14-Sep-20 12:57 PM</span>
+
+            <div class="chatlog__message " data-message-id="754966518630055956" id="message-754966518630055956">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><strong>Day 11 - 13/09/2020</strong>
+Those goddamn cheeky, adorable faces that you make when you watch me working <img class="emoji " alt="😂" title="😂" src="https://twemoji.maxcdn.com/2/72x72/1f602.png"> 
+
+You see, I&#39;ll be typing away on my laptop, writing in my book or whatever and him being the big child he is, to get my attention he&#39;ll be doing this... 
+<img class="emoji " alt="😮" title="😮" src="https://twemoji.maxcdn.com/2/72x72/1f62e.png"><img class="emoji " alt="😳" title="😳" src="https://twemoji.maxcdn.com/2/72x72/1f633.png"><img class="emoji " alt="😁" title="😁" src="https://twemoji.maxcdn.com/2/72x72/1f601.png"><img class="emoji " alt="😑" title="😑" src="https://twemoji.maxcdn.com/2/72x72/1f611.png"><img class="emoji " alt="🤔" title="🤔" src="https://twemoji.maxcdn.com/2/72x72/1f914.png"><img class="emoji " alt="😬" title="😬" src="https://twemoji.maxcdn.com/2/72x72/1f62c.png"><img class="emoji " alt="🤨" title="🤨" src="https://twemoji.maxcdn.com/2/72x72/1f928.png">
+He thinks I&#39;m not looking, but I really am. And when I catch him out, he gets all shy and embarrassed like this <img class="emoji " alt="😯" title="😯" src="https://twemoji.maxcdn.com/2/72x72/1f62f.png"><img class="emoji " alt="🤭" title="🤭" src="https://twemoji.maxcdn.com/2/72x72/1f92d.png"><img class="emoji " alt="😆" title="😆" src="https://twemoji.maxcdn.com/2/72x72/1f606.png">
+
+So freaking cute! <img class="emoji " alt="😡" title="😡" src="https://twemoji.maxcdn.com/2/72x72/1f621.png"></span>
+
+                                <span class="chatlog__edited-timestamp" title="10-Oct-20 03:21 AM">(edited)</span>
+                        </div>
+                    </div>
+
+
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/519927226280443928/8adb83663f3310e4c7f8b0ecbb030edd.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Aishah Hannan#7828" data-user-id="519927226280443928" style="color: rgb(240,99,3)">Aishah Hannan</span>
+
+
+        <span class="chatlog__timestamp">16-Sep-20 02:26 PM</span>
+
+            <div class="chatlog__message " data-message-id="755713709053050880" id="message-755713709053050880">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><strong>Day 12 - 14/09/2020</strong>
+Your music taste! One of the greatest things about the both of us, is that we literally have no specific music genre we listen to. Whatever sounds good to the ear, we play, and that&#39;s great because it makes it easier to just jam to the same thing <img class="emoji " alt="😁" title="😁" src="https://twemoji.maxcdn.com/2/72x72/1f601.png"> 
+One thing I noticed is that you&#39;re definitely more into alternative rock, and I love that because so am I! 
+
+<strong>Day 13 - 15/09/2020</strong>
+Your singing... I don&#39;t know how one man can be so multi-talented! I could listen to you sing all day, I crave for it. And when you sing me to sleep on days where I&#39;m super tired, I fall asleep within seconds like a baby. I&#39;m so lucky to be able to hear that voice for the rest of my life. I couldn&#39;t have asked for anything more <img class="emoji " alt="♥" title="♥" src="https://twemoji.maxcdn.com/2/72x72/2665.png">️</span>
+
+                                <span class="chatlog__edited-timestamp" title="10-Oct-20 03:21 AM">(edited)</span>
+                        </div>
+                    </div>
+
+
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/519927226280443928/8adb83663f3310e4c7f8b0ecbb030edd.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Aishah Hannan#7828" data-user-id="519927226280443928" style="color: rgb(240,99,3)">Aishah Hannan</span>
+
+
+        <span class="chatlog__timestamp">18-Sep-20 12:44 PM</span>
+
+            <div class="chatlog__message " data-message-id="756412887655907358" id="message-756412887655907358">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><strong>Day 14 - 16/09/2020</strong>
+You treat me like a Queen, like nobody else has ever done before. You respect me, hype me up, respect that we both have different viewpoints and opinions about some things, although most of the time we&#39;re on the same wavelength <img class="emoji " alt="😣" title="😣" src="https://twemoji.maxcdn.com/2/72x72/1f623.png"> 
+The respect though...that&#39;s a major factor which you uphold! Thank you <img class="emoji " alt="♥" title="♥" src="https://twemoji.maxcdn.com/2/72x72/2665.png">️
+
+
+<strong>Day 15 - 17/09/2020</strong>
+My biggest fear was telling you about my mental illness. I never thought it would bother you but there was always an itching feeling of &quot;what if&quot; at the back of my mind... 
+But when I told you, you didn&#39;t even flinch. You didn&#39;t bombard me with questions (which I never minded anyway), but you went with your own initiative and did your own research... 
+
+And then you said, &quot;I love you for you and nothing can change that.&quot;... That was enough for me to know that you&#39;re the one for me <img class="emoji " alt="♥" title="♥" src="https://twemoji.maxcdn.com/2/72x72/2665.png">️</span>
+
+                                <span class="chatlog__edited-timestamp" title="10-Oct-20 03:20 AM">(edited)</span>
+                        </div>
+                    </div>
+
+
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/519927226280443928/8adb83663f3310e4c7f8b0ecbb030edd.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Aishah Hannan#7828" data-user-id="519927226280443928" style="color: rgb(240,99,3)">Aishah Hannan</span>
+
+
+        <span class="chatlog__timestamp">22-Sep-20 02:37 AM</span>
+
+            <div class="chatlog__message " data-message-id="757709495215325244" id="message-757709495215325244">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><strong>Day 16 - 18/09/2020</strong>
+I don&#39;t understand how two people can be so similar yet different... 
+I love how we have the exact same morals and vision of the world! Even topics such as religion and evolution, we have curious minds and question everything! And often those curious questions are the same! It&#39;s so nice that we&#39;re always on the same page <img class="emoji " alt="♥" title="♥" src="https://twemoji.maxcdn.com/2/72x72/2665.png">️
+
+<strong>Day 17 - 19/09/2020</strong>
+We listen! Something many couples often have an issue with. When one of us is talking, we listen attentively and only ask a question once the other person has finished. We never talk over each other, and it&#39;s so cute <img class="emoji " alt="😣" title="😣" src="https://twemoji.maxcdn.com/2/72x72/1f623.png">
+
+<strong>Day 18 - 20/09/2020</strong>
+I love every freaking side to you but your baby Nadeem side! Oh my god, it makes me melt! The way your voice changes like a little child, and then your &quot;noooooo&quot; and &quot;hmmffff&quot; is so adorable. And I always found myself to never be swayed my people&#39;s opinions but YOU, your cute self is enough for me to fall down on my knees <img class="emoji " alt="😣" title="😣" src="https://twemoji.maxcdn.com/2/72x72/1f623.png"> I&#39;m so honoured that only a couple of people have seen this side you <img class="emoji " alt="♥" title="♥" src="https://twemoji.maxcdn.com/2/72x72/2665.png">️ 
+
+<strong>Day 19 - 21/09/2020</strong>
+You always find ways to suprise me! You know, even when life was super busy for you back in March, you never failed to bring a smile to my face. Your poems, your songs, your recordings, the teddy bear, the rose, the McDonald&#39;s meal, the milkshakes, the aishah crown, my name on your whiteboard, to think that somebody would make my happiness a priority is something I never believed could come true!
+
+Thank you so much and I can&#39;t wait to shower you with more surprises!! <img class="emoji " alt="♥" title="♥" src="https://twemoji.maxcdn.com/2/72x72/2665.png">️</span>
+
+                                <span class="chatlog__edited-timestamp" title="10-Oct-20 03:20 AM">(edited)</span>
+                        </div>
+                    </div>
+
+
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/519927226280443928/8adb83663f3310e4c7f8b0ecbb030edd.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Aishah Hannan#7828" data-user-id="519927226280443928" style="color: rgb(240,99,3)">Aishah Hannan</span>
+
+
+        <span class="chatlog__timestamp">27-Sep-20 09:39 PM</span>
+
+            <div class="chatlog__message " data-message-id="759808823371366430" id="message-759808823371366430">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><strong>Day 20 - 22/09/2020</strong>
+I live in England, he lives in Pune, India. He&#39;s in the Military, I&#39;m a Psychologist in training. But nothing can keep us apart <img class="emoji " alt="♥" title="♥" src="https://twemoji.maxcdn.com/2/72x72/2665.png">️
+We always say, <em>where there&#39;s a will, there&#39;s a way.</em> 
+
+He&#39;s not here with me right now, but I know that he&#39;s listening to this radio station. We may be thousands of miles apart but we find ways to stay connected without hearing each other. I&#39;ve never felt such a spiritual connection with anyone in my life... 
+
+I can feel him sat beside me right now, listening along. Love is one hell of a thing... 
+N.C <img class="emoji " alt="👑" title="👑" src="https://twemoji.maxcdn.com/2/72x72/1f451.png">
+
+And yes I&#39;m incredibly behind on these but we&#39;ll get there...</span>
+
+                                <span class="chatlog__edited-timestamp" title="10-Oct-20 03:20 AM">(edited)</span>
+                        </div>
+                    </div>
+
+                    <div class="chatlog__attachment">
+                        <div class="" onclick="">
+                            <div class="">
+                                    <a href="https://cdn.discordapp.com/attachments/715630063596601415/759808820549124116/Screenshot_20200927-170110.jpg">
+                                        <img class="chatlog__attachment-thumbnail" src="https://cdn.discordapp.com/attachments/715630063596601415/759808820549124116/Screenshot_20200927-170110.jpg" alt="Image attachment" title="Image: Screenshot_20200927-170110.jpg (32.04 KB)">
+                                    </a>
+                            </div>
+                        </div>
+                    </div>
+
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/519927226280443928/8adb83663f3310e4c7f8b0ecbb030edd.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Aishah Hannan#7828" data-user-id="519927226280443928" style="color: rgb(240,99,3)">Aishah Hannan</span>
+
+
+        <span class="chatlog__timestamp">29-Sep-20 03:27 AM</span>
+
+            <div class="chatlog__message " data-message-id="760258904478711808" id="message-760258904478711808">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><strong>Day 21 - 23/09/2020</strong>
+I love the way you stare at me when I&#39;m on video call... Your eyes, they just speak volumes. They hold so much care and love for me. It makes me tear up every time I see you, see me <img class="emoji " alt="😣" title="😣" src="https://twemoji.maxcdn.com/2/72x72/1f623.png">
+
+<strong>Day 22 - 24/09/2020</strong>
+You show me off to the world, introduce me to your friends. You flaunt me and always talk about me! I&#39;ve never had anyone be so proud of me like you are. You make me feel so goddamn special, and when I speak to your friends in the academy, they treat me with so much respect, and I love that <img class="emoji " alt="😢" title="😢" src="https://twemoji.maxcdn.com/2/72x72/1f622.png">
+
+<strong>Day 23 - 25/09/2020</strong>
+You&#39;re not afraid to show your vulnerable side to me, and I love it so much when you come to me to confide in. I know you find it hard to say how you feel when you&#39;re low, I know you tend to bottle it up until your cap is let loose and you explode, but I&#39;m so proud that you&#39;re working on it!
+People always see the chirpy, bubbly, optimistic Nadeem, and whilst I know him, I always know the Nadeem who&#39;s gone through things beyond anyone can imagine. 
+I will support you and hold you till the day I die <img class="emoji " alt="♥" title="♥" src="https://twemoji.maxcdn.com/2/72x72/2665.png">️</span>
+
+                                <span class="chatlog__edited-timestamp" title="10-Oct-20 03:20 AM">(edited)</span>
+                        </div>
+                    </div>
+
+
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/519927226280443928/8adb83663f3310e4c7f8b0ecbb030edd.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Aishah Hannan#7828" data-user-id="519927226280443928" style="color: rgb(240,99,3)">Aishah Hannan</span>
+
+
+        <span class="chatlog__timestamp">02-Oct-20 02:35 AM</span>
+
+            <div class="chatlog__message " data-message-id="761333105013161994" id="message-761333105013161994">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><strong>Day 24 - 26/09/2020</strong>
+I love the way you make an effort with all of my/our friends. Whether that be Mais, Mukund or Samad, whomever I get along with, you try to as well, even if you have your differences. To be able to just go into a vc with all of us, and it being super casual and not forced feels epic <img class="emoji " alt="😊" title="😊" src="https://twemoji.maxcdn.com/2/72x72/1f60a.png">
+
+<strong>Day 25 - 27/09/2020</strong>
+When you read a book, I love that you summarize chapters for me and tell me everything you&#39;ve learnt! Wallahi I&#39;ve never met a man as smart as you. The way you absorb every minute detail, and can regurgitate better than most books can makes me love you even more! Allah truly blessed me with a smart ass man. Our kids will have good genetics then I suppose, iA ;)
+
+<strong>Day 26 - 28/09/2020</strong>
+You&#39;re so open about everything and anything! Most men would say yuck at the thought of women talking about their menses, but you ask me questions and want to get to know more! You never undermine our pain, or compare it too &quot;kicking someone in the balls&quot; as some guys do. You actually validate my pain, so thank you for that <img class="emoji " alt="♥" title="♥" src="https://twemoji.maxcdn.com/2/72x72/2665.png">️
+
+<strong>Day 27 - 29/09/2020</strong>
+I love how we bounce ideas off each other! The way we come up with duo research ideas, and then the thoughts come flowing out! We&#39;re so in sync with our creativity and knowledge, and we combine our differences to create masterpieces! 
+
+<strong>Day 28 - 30/09/2020</strong>
+<em>&quot;Where there&#39;s a will, there&#39;s a way&quot;</em> - Lt. Nadeem Akhtar Choudhury</span>
+
+                                <span class="chatlog__edited-timestamp" title="10-Oct-20 03:19 AM">(edited)</span>
+                        </div>
+                    </div>
+
+
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/519927226280443928/8adb83663f3310e4c7f8b0ecbb030edd.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Aishah Hannan#7828" data-user-id="519927226280443928" style="color: rgb(240,99,3)">Aishah Hannan</span>
+
+
+        <span class="chatlog__timestamp">10-Oct-20 03:13 AM</span>
+
+            <div class="chatlog__message " data-message-id="764241535633195029" id="message-764241535633195029">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><strong>Day 29 - 01/10/2020</strong>
+I miss your goddamn smile ahh
+
+<strong>Day 30 - 02/10/2020</strong>
+Okay but I love hope open you are to me about literally EVERYTHING AND ANYTHING. You know exactly what I&#39;m talking about <img class="emoji " alt="🙂" title="🙂" src="https://twemoji.maxcdn.com/2/72x72/1f642.png">
+
+<strong>Day 32 - 03/10/2020</strong>
+I love it when you&#39;re sleeping and suddenly start talking! I have no idea how your brain does it. You have full on conversations with me when you&#39;re asleep and when you&#39;re awake you have absolutely no recollection. I love writing down your sleep talks so we can laugh about them later on!
+
+
+<strong>Day 33 - 04/10/2020</strong>
+Your passion for books ahh! My little nerd. I absolutely love how you adore non-fiction books, just like me, but also how you&#39;ve opened your world to fiction books now too. 
+
+<strong>Day 34 - 05/10/2020</strong>
+The way you treat animals is questionable to say the least haha! I know you like <em>experimenting</em> with them, and you know what, I&#39;m fascinated by your findings! But what I love is how you observe the environment of even animals and sit with them for 30 minutes in the rain, talking to them as if they&#39;re listening to you. Why u gotta be so cute for argh! <img class="emoji " alt="😡" title="😡" src="https://twemoji.maxcdn.com/2/72x72/1f621.png">
+
+<strong>Day 35 - 06/10/2020</strong>
+We&#39;re so open about anything and everything! We never restrict each other from doing anything, because all we want is for one another to be happy. We trust, we believe and we know that our intentions are always in the best interests. I love that about you. You give me freedom, you liberate me, you treat me like a human and not some object. It&#39;s so rare to find men like you <img class="emoji " alt="♥" title="♥" src="https://twemoji.maxcdn.com/2/72x72/2665.png">️</span>
+
+                                <span class="chatlog__edited-timestamp" title="18-Oct-20 05:39 AM">(edited)</span>
+                        </div>
+                    </div>
+
+
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/519927226280443928/8adb83663f3310e4c7f8b0ecbb030edd.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Aishah Hannan#7828" data-user-id="519927226280443928" style="color: rgb(240,99,3)">Aishah Hannan</span>
+
+
+        <span class="chatlog__timestamp">18-Oct-20 05:39 AM</span>
+
+            <div class="chatlog__message " data-message-id="767177520234758185" id="message-767177520234758185">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><strong>Day 36 - 07/10/2020</strong>
+That craziness! It&#39;s no wonder your mother is always so worried about you! The way you jumped off a 25 feet balcony to get to your dad when you were two years old, and survived with just scratches. I love how adventurous and risk-seeking you are but you do worry me with your crazy ambitions! 
+
+<strong>Day 37 - 08/10/2020</strong>
+You gained 3kg!! You&#39;re now officially 61kg, and I know you&#39;ve been trying so hard towards this weight-gain journey, and to see how much progress you made, makes me incredibly happy too. Your success is my success! When you told me, I remember leaping with joy and screaming. I felt as if I had accomplished something too <img class="emoji " alt="👑" title="👑" src="https://twemoji.maxcdn.com/2/72x72/1f451.png">
+
+
+<strong>Day 38 - 09/10/2020</strong>
+I&#39;m so incredibly proud of you for getting your photo taken today, for your new role! In 4 weeks you&#39;d have officially made it. You&#39;ll be an officer! All the hard work and dedication you&#39;ve put into this, the pain you&#39;ve endured, the times where you&#39;ve wanted to give up but pushed through despite it getting tough. I have never met someone as strong as you. You&#39;re inspiring, a role model to me and so many others <img class="emoji " alt="♥" title="♥" src="https://twemoji.maxcdn.com/2/72x72/2665.png">️
+
+I&#39;m missing you so much right now. I really wish you were here...</span>
+
+                        </div>
+                    </div>
+
+
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/519927226280443928/8adb83663f3310e4c7f8b0ecbb030edd.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Aishah Hannan#7828" data-user-id="519927226280443928" style="color: rgb(240,99,3)">Aishah Hannan</span>
+
+
+        <span class="chatlog__timestamp">24-Oct-20 02:57 PM</span>
+
+            <div class="chatlog__message " data-message-id="769492319555682304" id="message-769492319555682304">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Day 39 - 10/10/2020
+When I tune into my kiddy self, you also do the same! And the voices you make to reflect my behaviour ahhh, it&#39;s just so perfect how you can switch up just like I can. Nobody can do this the way you do! Thank you x
+
+Day 40 - 11/10/2020
+Your protectiveness, the way you&#39;ll defend anyone who comes to harm me. But you also know where the line is, you know that I can protect myself, so you don&#39;t interfere unless you think it&#39;s absolutely necessary. Thank you for respecting that and believing that I could handle situations!
+
+Day 41 - 12/10/2020
+The way you bring me back to the present moment when I blackout. You know when it&#39;s incoming, and nobody else can figure it out. They just take me for ignoring them. You understand that it&#39;s more than just me not replying or saying a simple &quot;hmm&quot;, you know I&#39;ve dissociated. You don&#39;t make me feel bad for it, you don&#39;t judge me, you understand. Thank you!
+
+Day 42 - 13/10/2020
+Today was tough for the both of us, I know. One thing I love about you is how you know when I need time alone to simply think. Time to recollect my thoughts. You understand and trust that I&#39;ll be okay, so you don&#39;t push me or invade the mental space I need. Thank you for that. 
+
+Day 43 - 14/10/2020
+You defend me and you put me first always, even after I&#39;ve told you that you don&#39;t need to do that for me. You said, &quot;wouldnt you also despise the person who hurts your family?&quot;... that&#39;s when I knew how much you truly cared about me...
+
+<strong>Day 44 - 15/10/2020</strong>
+You ask me for my advice when it comes to fashion because you know that&#39;s where your weakness is. I love that so muchh! It&#39;s fun, it gets me all creative and it has me hyper! I love coordinating outfits together ahhh</span>
+
+                                <span class="chatlog__edited-timestamp" title="24-Oct-20 03:02 PM">(edited)</span>
+                        </div>
+                    </div>
+
+
+
+            </div>
+            <div class="chatlog__message " data-message-id="769493582771388437" id="message-769493582771388437">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><strong>Day 45 - 16/10/2020</strong>
+Remember when we would record for each other when time-zones and our job got us all busy? I would be walking towards the car park, grab my phone out and hit the record button. Sometimes I&#39;d hide in the bathroom at work just to give you a call and say &quot;I love you.&quot; Coming home to you was the best part of those days but those recordings come a close second! They kept me afloat when I missed you the most <img class="emoji " alt="♥" title="♥" src="https://twemoji.maxcdn.com/2/72x72/2665.png">️
+
+<strong>Day 46 - 17/10/2020</strong>
+We investigate suspicious activity together. We bring forth the idea and then find evidence to justify our reasonings. I mean people would call that weird, but it&#39;s so much fun seeing us both on the same page, or having different ideas which eventually lead us both to the same conclusion!!
+
+<strong>Day 47 - 18/10/2020</strong>
+I still can&#39;t believe you brought Mehran into this server because you were interested and wanted his opinion! That&#39;s the cutest thing in the world awww
+
+<strong>Day 48 - 19/10/2020</strong>
+I love how you&#39;re so open to trying different food combinations because I swear to god if I had someone who would respond with an &quot;Ew, I don&#39;t want to try that, that sounds weird&quot; dialogue, I would have jumped off a bridge! 
+
+<strong>Day 49 - 20/10/2020</strong>
+You&#39;re the key! It took me going through so much shit to get to you, and you know what? That pain was fucking worth it to get you! 
+
+<strong>Day 50 - 21/10/2020</strong>
+I love that we&#39;re able to come to a solution even when the situation seems impossible! We discuss and outweigh the positives to the negatives and never bicker when making tough decisions. We actually listen... 
+
+<strong>Day 51 - 22/10/2020</strong>
+You know what, I just love you so goddamn much!
+
+<strong>Day 52 - 23/10/2020</strong>
+The fact that you stayed up till midnight just to say happy anniversary, even after lights out just goes to show how stubborn but fricking romantic you are! You would risk anything for me and even when I tell u not to, you still find a way to always make me feel special!</span>
+
+                                <span class="chatlog__edited-timestamp" title="24-Oct-20 07:55 PM">(edited)</span>
+                        </div>
+                    </div>
+
+
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/519927226280443928/8adb83663f3310e4c7f8b0ecbb030edd.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Aishah Hannan#7828" data-user-id="519927226280443928" style="color: rgb(240,99,3)">Aishah Hannan</span>
+
+
+        <span class="chatlog__timestamp">24-Oct-20 08:14 PM</span>
+
+            <div class="chatlog__message " data-message-id="769571904784302090" id="message-769571904784302090">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><em>With great power, comes great responsibility!!!!!</em></span>
+
+                        </div>
+                    </div>
+
+
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/588646589887938580/eae27e1b32a548eb06242e918662fb56.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Nadeem Akhtar#9649" data-user-id="588646589887938580" style="color: rgb(252,25,112)">Lt. Nadeem Choudhury</span>
+
+
+        <span class="chatlog__timestamp">25-Oct-20 12:43 AM</span>
+
+            <div class="chatlog__message " data-message-id="769639746913566760" id="message-769639746913566760">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">If this 5000 miles wasnt there....
+I wud have held u tightly....close to me my queen.....my sultana.....
+
+And tell u.....the bad thing is over.....im here to give u all the love,respect and protection......so that u soar higher, and keep that smile......
+
+I took that vow since day one and i reiterate it daily, ill reiterate it today again.....i will always make sure you laugh, smile and giggle......
+
+Because my very purpose of existence is your smile and NOTHING ELSE!
+
+Perfect woman on this planet....
+
+Hope that everyone gets their Aishah!</span>
+
+                                <span class="chatlog__edited-timestamp" title="25-Oct-20 08:12 AM">(edited)</span>
+                        </div>
+                    </div>
+
+
+
+                    <div class="chatlog__reactions">
+                            <div class="chatlog__reaction">
+                                <img class="emoji emoji--small" alt="❤️" title="❤️" src="https://twemoji.maxcdn.com/2/72x72/2764.png">
+                                <span class="chatlog__reaction-count">1</span>
+                            </div>
+                    </div>
+            </div>
+    </div>
+</div>
+
+</div>
+
+<div class="postamble">
+    <div class="postamble__entry">Exported 83 message(s)</div>
+</div>
+
+</body>
+
+</html>
